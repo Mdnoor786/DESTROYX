@@ -88,12 +88,17 @@ async def on_afk(event):
         msg = None# Originally by @ProgrammingError
 # I think its first for DARKCOBRA
         message_to_reply = (
-            f"✨✨**Sorry #AFK since :-**`{total_afk_time}`"
-            + f"\n\n🔸__If AnyThing Imp Then dm __🔸"
-            + f"\n\n__\n\n⚜️**Reason:-** `{reason}`"
-  if reason
+            (
+                (
+                    f"✨✨**Sorry #AFK since :-**`{total_afk_time}`"
+                    + "\\n\\n🔸__If AnyThing Imp Then dm __🔸"
+                )
+                + f"\n\n__\n\n⚜️**Reason:-** `{reason}`"
+            )
+            if reason
             else f"**Heyy!**\n\n**✨Sorry #AFK since :-** `{total_afk_time}`\n\n__Keep patients 😁😁__ or __Dm if Imp__ "
         )
+
         msg = await event.reply(message_to_reply, file=pic)
         await asyncio.sleep(2.5)
         if event.chat_id in last_afk_message:  # pylint:disable=E0602
@@ -135,7 +140,7 @@ async def _(event):
                 event.chat_id, f"**I shall be Going afk!** __because ~ {reason}__", file=pic
             )
         else:
-            await borg.send_message(event.chat_id, f"**I am Going afk!**", file=pic)
+            await borg.send_message(event.chat_id, "**I am Going afk!**", file=pic)
         await asyncio.sleep(0.001)
         await event.delete()
         try:

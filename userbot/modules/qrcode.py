@@ -17,9 +17,14 @@ async def parseqr(qr_e):
         await qr_e.get_reply_message())
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = [
-        "curl", "-X", "POST", "-F", "f=@" + downloaded_file_name + "",
-        "https://zxing.org/w/decode"
+        "curl",
+        "-X",
+        "POST",
+        "-F",
+        f"f=@{downloaded_file_name}",
+        "https://zxing.org/w/decode",
     ]
+
     process = await asyncio.create_subprocess_exec(
         *command_to_exec,
         # stdout must a pipe to be accessible as process.stdout
@@ -36,24 +41,26 @@ async def parseqr(qr_e):
         logger.info(t_response)
         await qr_e.edit("Failed to decode.")
         return
-        LOGS.info(e_response)
-        LOGS.info(t_response)
-        return await qr_e.edit("Failed to decode.")
     soup = BeautifulSoup(t_response, "html.parser")
     qr_contents = soup.find_all("pre")[0].text
     await qr_e.edit(qr_contents)
 
 
 
-@javes.on(rekcah05(pattern=f"decodeqr$", allow_sudo=True))
+@javes.on(rekcah05(pattern="decodeqr$", allow_sudo=True))
 async def parseqr(qr_e): 
     downloaded_file_name = await qr_e.client.download_media(
         await qr_e.get_reply_message())
     # parse the Official ZXing webpage to decode the QRCode
     command_to_exec = [
-        "curl", "-X", "POST", "-F", "f=@" + downloaded_file_name + "",
-        "https://zxing.org/w/decode"
+        "curl",
+        "-X",
+        "POST",
+        "-F",
+        f"f=@{downloaded_file_name}",
+        "https://zxing.org/w/decode",
     ]
+
     process = await asyncio.create_subprocess_exec(
         *command_to_exec,
         # stdout must a pipe to be accessible as process.stdout
@@ -70,9 +77,6 @@ async def parseqr(qr_e):
         logger.info(t_response)
         await qr_e.reply("Failed to decode.")
         return
-        LOGS.info(e_response)
-        LOGS.info(t_response)
-        return await qr_e.reply("Failed to decode.")
     soup = BeautifulSoup(t_response, "html.parser")
     qr_contents = soup.find_all("pre")[0].text
     await qr_e.reply(qr_contents)
@@ -95,9 +99,7 @@ async def bq(event):
             m_list = None
             with open(downloaded_file_name, "rb") as fd:
                 m_list = fd.readlines()
-            message = ""
-            for m in m_list:
-                message += m.decode("UTF-8") + "\r\n"
+            message = "".join(m.decode("UTF-8") + "\r\n" for m in m_list)
             os.remove(downloaded_file_name)
         else:
             message = previous_message.message
@@ -120,7 +122,7 @@ async def bq(event):
 
 
 
-@javes.on(rekcah05(pattern=f"barcode(?: |$)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="barcode(?: |$)([\\s\\S]*)", allow_sudo=True))
 async def bq(event):
     """ For .barcode command, genrate a barcode containing the given content. """    
     input_str = event.pattern_match.group(1)
@@ -137,9 +139,7 @@ async def bq(event):
             m_list = None
             with open(downloaded_file_name, "rb") as fd:
                 m_list = fd.readlines()
-            message = ""
-            for m in m_list:
-                message += m.decode("UTF-8") + "\r\n"
+            message = "".join(m.decode("UTF-8") + "\r\n" for m in m_list)
             os.remove(downloaded_file_name)
         else:
             message = previous_message.message
@@ -179,9 +179,7 @@ async def make_qr(makeqr):
             m_list = None
             with open(downloaded_file_name, "rb") as file:
                 m_list = file.readlines()
-            message = ""
-            for media in m_list:
-                message += media.decode("UTF-8") + "\r\n"
+            message = "".join(media.decode("UTF-8") + "\r\n" for media in m_list)
             os.remove(downloaded_file_name)
         else:
             message = previous_message.message
@@ -204,7 +202,7 @@ async def make_qr(makeqr):
 
 
 
-@javes.on(rekcah05(pattern=f"qrcode(?: |$)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="qrcode(?: |$)([\\s\\S]*)", allow_sudo=True))
 async def make_qr(makeqr):
     """ For .makeqr command, make a QR Code containing the given content. """
     input_str = makeqr.pattern_match.group(1)
@@ -221,9 +219,7 @@ async def make_qr(makeqr):
             m_list = None
             with open(downloaded_file_name, "rb") as file:
                 m_list = file.readlines()
-            message = ""
-            for media in m_list:
-                message += media.decode("UTF-8") + "\r\n"
+            message = "".join(media.decode("UTF-8") + "\r\n" for media in m_list)
             os.remove(downloaded_file_name)
         else:
             message = previous_message.message

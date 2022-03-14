@@ -91,7 +91,7 @@ async def scam(results, lim):
     oboi = re.findall(pattern, decoded, re.I | re.M)
     for imglink in oboi:
         counter += 1
-        if not counter >= int(lim):
+        if counter < int(lim):
             imglinks.append(imglink)
         else:
             break
@@ -106,9 +106,8 @@ async def chrome(chrome_options=None):
         os.mkdir(TEMP_DOWNLOAD_DIRECTORY)
     prefs = {'download.default_directory': TEMP_DOWNLOAD_DIRECTORY}
     chrome_options.add_experimental_option('prefs', prefs)
-    driver = webdriver.Chrome(executable_path=CHROME_DRIVER,
+    return webdriver.Chrome(executable_path=CHROME_DRIVER,
                               options=chrome_options)
-    return driver
 #Made by Shivam#Made by Shivam#Made by Shivam#Made by Shivam#Made by Shivam#Made by Shivam#Made by Shivam#Made by Shivam
 #Made by Sh1vam#Made by Sh1vam#Made by Sh1vam#Made by Sh1vam#Made by Sh1vam
 #Made by Sh1vam#Made by Sh1vam#Made by Sh1vam#Made by Sh1vam

@@ -17,7 +17,7 @@ async def kek(keks):
     uio = ["/", "\\"]
     for i in range(1, 15):
         time.sleep(0.3)
-        await keks.edit(":" + uio[i % 2])
+        await keks.edit(f":{uio[i % 2]}")
 
 
 @friday.on(events.NewMessage(pattern=r"\.para", outgoing=True))
@@ -26,7 +26,7 @@ async def kek(keks):
     uio = [")", "("]
     for i in range(1, 15):
         time.sleep(0.3)
-        await keks.edit(":" + uio[i % 2])
+        await keks.edit(f":{uio[i % 2]}")
 
 
 @friday.on(events.NewMessage(pattern=r"\.question", outgoing=True))
@@ -43,8 +43,8 @@ async def _(event):
 @friday.on(events.NewMessage(pattern=r"\.oof", outgoing=True))
 async def Oof(e):
     t = "Oof"
-    for j in range(15):
-        t = t[:-1] + "of"
+    for _ in range(15):
+        t = f'{t[:-1]}of'
         await e.edit(t)
 
 
@@ -53,7 +53,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
-    animation_ttl = range(0, 36)
+    animation_ttl = range(36)
     # input_str = event.pattern_match.group(1)
     # if input_str == "nope":
     await event.edit(
@@ -78,8 +78,8 @@ async def _(event):
 @friday.on(events.NewMessage(pattern=r"\.ok", outgoing=True))
 async def Ok(e):
     t = "Ok"
-    for j in range(15):
-        t = t[:-1] + "k"
+    for _ in range(15):
+        t = f'{t[:-1]}k'
         await e.edit(t)
 
 
@@ -91,20 +91,20 @@ async def meme(event):
     sleepValue = 3
     memeVar = memeVar[6:]
 
-    await event.edit("-------------" + memeVar)
-    await event.edit("------------" + memeVar + "-")
-    await event.edit("-----------" + memeVar + "--")
-    await event.edit("----------" + memeVar + "---")
-    await event.edit("---------" + memeVar + "----")
-    await event.edit("--------" + memeVar + "-----")
-    await event.edit("-------" + memeVar + "------")
-    await event.edit("------" + memeVar + "-------")
-    await event.edit("-----" + memeVar + "--------")
-    await event.edit("----" + memeVar + "---------")
-    await event.edit("---" + memeVar + "----------")
-    await event.edit("--" + memeVar + "-----------")
-    await event.edit("-" + memeVar + "------------")
-    await event.edit(memeVar + "-------------")
+    await event.edit(f"-------------{memeVar}")
+    await event.edit(f"------------{memeVar}-")
+    await event.edit(f"-----------{memeVar}--")
+    await event.edit(f"----------{memeVar}---")
+    await event.edit(f"---------{memeVar}----")
+    await event.edit(f"--------{memeVar}-----")
+    await event.edit(f"-------{memeVar}------")
+    await event.edit(f"------{memeVar}-------")
+    await event.edit(f"-----{memeVar}--------")
+    await event.edit(f"----{memeVar}---------")
+    await event.edit(f"---{memeVar}----------")
+    await event.edit(f"--{memeVar}-----------")
+    await event.edit(f"-{memeVar}------------")
+    await event.edit(f'{memeVar}-------------')
     await event.edit(memeVar)
     await asyncio.sleep(sleepValue)
 
@@ -116,7 +116,7 @@ async def meme(event):
     flower = " 🌹"
     sleepValue = 5
 
-    await event.edit(flower + "        ")
+    await event.edit(f'{flower}        ')
     await event.edit(flower + flower + "       ")
     await event.edit(flower + flower + flower + "      ")
     await event.edit(flower + flower + flower + flower + "     ")
@@ -497,7 +497,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 0.1
-    animation_ttl = range(0, 64)
+    animation_ttl = range(64)
     animation_chars = [
         "`◼️◼️◼️◼️◼️\n◼️◼️◼️◼️☀\n◼️◼️🌎◼️◼️\n🌕◼️◼️◼️◼️\n◼️◼️◼️◼️◼️`",
         "`◼️◼️◼️◼️◼️\n🌕◼️◼️◼️◼️\n◼️◼️🌎◼️◼️\n◼️◼️◼️◼️☀\n◼️◼️◼️◼️◼️`",
@@ -657,10 +657,6 @@ async def _(event):
 
         return
 
-    animation_interval = 0.1
-
-    animation_ttl = range(0, 110)
-
     input_str = event.pattern_match.group(1)
 
     if input_str == "smoon":
@@ -678,6 +674,10 @@ async def _(event):
             "🌖🌖🌖🌖🌖\n🌒🌒🌒🌒🌒\n🌖🌖🌖🌖🌖\n🌒🌒🌒🌒🌒\n🌖🌖🌖🌖🌖",
         ]
 
+        animation_interval = 0.1
+
+        animation_ttl = range(110)
+
         for i in animation_ttl:
 
             await asyncio.sleep(animation_interval)
@@ -691,10 +691,6 @@ async def _(event):
     if event.fwd_from:
 
         return
-
-    animation_interval = 0.1
-
-    animation_ttl = range(0, 100)
 
     input_str = event.pattern_match.group(1)
 
@@ -736,6 +732,10 @@ async def _(event):
             "🌕",
             "🌖",
         ]
+
+        animation_interval = 0.1
+
+        animation_ttl = range(100)
 
         for i in animation_ttl:
 
@@ -4834,10 +4834,6 @@ async def _(event):
 
         return
 
-    animation_interval = 0.3
-
-    animation_ttl = range(0, 60)
-
     input_str = event.pattern_match.group(1)
 
     if input_str == "jagh":
@@ -4856,6 +4852,10 @@ async def _(event):
             "8==✊️=D💦💦",
             "8=✊️==D💦💦💦",
         ]
+
+        animation_interval = 0.3
+
+        animation_ttl = range(60)
 
         for i in animation_ttl:
 

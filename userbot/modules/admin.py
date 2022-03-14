@@ -28,7 +28,7 @@ from userbot import CMD_HELP
 async def get_user_from_event(event):  
     args = event.pattern_match.group(1).split(':', 1)
     extra = None
-    if event.reply_to_msg_id and not len(args) == 2:
+    if event.reply_to_msg_id and len(args) != 2:
         previous_message = await event.get_reply_message()
         user_obj = await event.client.get_entity(previous_message.from_id)
         extra = event.pattern_match.group(1)
@@ -51,7 +51,7 @@ async def get_user_from_event(event):
         try:
             user_obj = await event.client.get_entity(user)
         except Exception as err:
-            return await event.edit("Failed \n **Error**\n", str(err))           
+            return await event.edit("Failed \n **Error**\n", str(err))
     return user_obj, extra
 
 async def ban_user(chat_id, i, rights):
@@ -78,14 +78,12 @@ async def amount_to_secs(amount: tuple) -> int:
     num = int(num)
     if not unit:
         unit = 's'
-    if unit == 's':
-        return 60
-    elif unit == 'm':
-        return num * 60
+    if unit == 'd':
+        return num * 60 * 60 * 24
     elif unit == 'h':
         return num * 60 * 60
-    elif unit == 'd':
-        return num * 60 * 60 * 24
+    elif unit == 'm':
+        return num * 60
     elif unit == 'w':
         return num * 60 * 60 * 24 * 7
     elif unit == 'y':
@@ -98,11 +96,10 @@ async def string_to_secs(string: str) -> int:
     totalValues = len(values)
     if totalValues == 1:
         return await amount_to_secs(values[0])
-    else:
-        total = 0
-        for amount in values:
-            total += await amount_to_secs(amount)
-        return total
+    total = 0
+    for amount in values:
+        total += await amount_to_secs(amount)
+    return total
 regexp = re.compile(r"(\d+)(w|d|h|m|s)?")
 adminregexp = re.compile(r"\d+(?:w|d|h|m|s)?")
 
@@ -143,10 +140,9 @@ async def parse_arguments(
     for match in KWARGS.finditer(arguments):
         key = match.group('key')
         val = await _parse_arg(re.sub(r'[\'\"]', '', match.group('val')))
-        keyword_args.update({key: val})
+        keyword_args[key] = val
     arguments = KWARGS.sub('', arguments)
-    for val in ARGS.finditer(arguments):
-        args.append(await _parse_arg(val.group(2)))
+    args.extend(await _parse_arg(val.group(2)) for val in ARGS.finditer(arguments))
     arguments = ARGS.sub('', arguments)
     for val in re.findall(r'([^\r\n\t\f\v ,]+|\[.*\])', arguments):
         parsed = await _parse_arg(val)
@@ -159,7 +155,7 @@ async def parse_arguments(
 
 @javes05(outgoing=True, pattern="^\!promote(?: |$)(.*)", groups_only=True)
 async def promote(event):
-    chat = await event.get_chat()  
+    chat = await event.get_chat()
     if event.is_private:
        await event.reply("`You can't promote users in private chats.`")
        return
@@ -178,10 +174,8 @@ async def promote(event):
     user, rank = await get_user_from_event(event)
     if not rank:
         rank = "admin"
-    if user:
-        pass
-    else:
-        return    
+    if not user:
+        return
     try:
         await event.client(
             EditAdminRequest(event.chat_id, user.id, new_rights, rank))
@@ -192,14 +186,14 @@ async def promote(event):
     
 
 
-@javes.on(rekcah05(pattern=f"promote(?: |$)(.*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="promote(?: |$)(.*)", allow_sudo=True))
 async def promote(event):
-    chat = await event.get_chat()  
+    chat = await event.get_chat()
     if event.is_private:
        await event.reply("`You can't promote users in private chats.`")
        return
     admin = chat.admin_rights
-    creator = chat.creator   
+    creator = chat.creator
     if not admin and not creator:
         await event.reply(f"`{JAVES_NNAME}:` **I haven't got the admin rights to do this.**")
         return
@@ -213,10 +207,8 @@ async def promote(event):
     user, rank = await get_user_from_event(event)
     if not rank:
         rank = "admin"
-    if user:
-        pass
-    else:
-        return    
+    if not user:
+        return
     try:
         await event.client(
             EditAdminRequest(event.chat_id, user.id, new_rights, rank))
@@ -241,12 +233,10 @@ async def demote(event):
     admin = chat.admin_rights
     creator = chat.creator
     await event.edit(f"`{JAVES_NNAME}:`** Demoting user......**")
-    rank = "admin" 
+    rank = "admin"
     user = await get_user_from_event(event)
     user = user[0]
-    if user:
-        pass
-    else:
+    if not user:
         return
     newrights = ChatAdminRights(add_admins=None,
                                 invite_users=None,
@@ -256,15 +246,14 @@ async def demote(event):
                                 pin_messages=None)
     try:
         await event.client(
-            EditAdminRequest(event.chat_id, user.id, newrights, rank))    
+            EditAdminRequest(event.chat_id, user.id, newrights, rank))
     except BadRequestError:
         return await rkp.edit(f"`{JAVES_NNAME}:`**I don't have sufficient permissions!**")
-        return
     await event.edit(f"`{JAVES_NNAME}:` **Demoted user [{user.first_name}](tg://user?id={user.id}) to admin  Sucessfully in {event.chat.title}**")
     
 
 
-@javes.on(rekcah05(pattern=f"demote(?: |$)(.*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="demote(?: |$)(.*)", allow_sudo=True))
 async def demote(event):
     chat = await event.get_chat()
     if event.is_private:
@@ -273,12 +262,10 @@ async def demote(event):
     admin = chat.admin_rights
     creator = chat.creator
     rkp = await event.reply(f"`{JAVES_NNAME}:`** Demoting user......**")
-    rank = "admin" 
+    rank = "admin"
     user = await get_user_from_event(event)
     user = user[0]
-    if user:
-        pass
-    else:
+    if not user:
         return
     newrights = ChatAdminRights(add_admins=None,
                                 invite_users=None,
@@ -288,10 +275,9 @@ async def demote(event):
                                 pin_messages=None)
     try:
         await event.client(
-            EditAdminRequest(event.chat_id, user.id, newrights, rank))    
+            EditAdminRequest(event.chat_id, user.id, newrights, rank))
     except BadRequestError:
         return await rkp.edit(f"`{JAVES_NNAME}:`**I don't have sufficient permissions!**")
-        return
     await rkp.edit(f"`{JAVES_NNAME}:` **Demoted user [{user.first_name}](tg://user?id={user.id}) to admin  Sucessfully in {event.chat.title}**")
            
 
@@ -349,7 +335,7 @@ async def ban(event):
         await event.reply(text)
 
 
-@javes.on(rekcah05(pattern=f"ban(?: |$|\n)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="ban(?: |$|\\n)([\\s\\S]*)", allow_sudo=True))
 async def ban(event):    
     if event.is_private:
         await event.reply("`You can't ban users in private chats.`")
@@ -450,7 +436,7 @@ async def ban(event):
         await event.reply(text2)
         await event.reply(text)
 
-@javes.on(rekcah05(pattern=f"unban(?: |$|\n)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="unban(?: |$|\\n)([\\s\\S]*)", allow_sudo=True))
 async def ban(event):    
     if event.is_private:
         await event.reply("`You can't unban users in private chats.`")
@@ -548,7 +534,7 @@ async def ban(event):
         await event.reply(text2)
         await event.reply(text)
 
-@javes.on(rekcah05(pattern=f"mute(?: |$|\n)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="mute(?: |$|\\n)([\\s\\S]*)", allow_sudo=True))
 async def ban(event):    
     if event.is_private:
         await event.reply("`You can't mute users in private chats.`")
@@ -648,7 +634,7 @@ async def ban(event):
         await event.reply(text)
 
 
-@javes.on(rekcah05(pattern=f"unmute(?: |$|\n)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="unmute(?: |$|\\n)([\\s\\S]*)", allow_sudo=True))
 async def ban(event):    
     if event.is_private:
         await event.reply("`You can't unmute users in private chats.`")
@@ -746,7 +732,7 @@ async def ban(event):
         await event.reply(text2)
         await event.reply(text)
 
-@javes.on(rekcah05(pattern=f"kick(?: |$|\n)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="kick(?: |$|\\n)([\\s\\S]*)", allow_sudo=True))
 async def ban(event):    
     if event.is_private:
         await event.reply("`You can't kick users in private chats.`")
@@ -857,7 +843,7 @@ async def tmute(event):
         await event.reply(text)
 
     
-@javes.on(rekcah05(pattern=f"tmute(?: |$|\n)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="tmute(?: |$|\\n)([\\s\\S]*)", allow_sudo=True))
 async def tmute(event):
     if event.is_private:
         await event.reply("`You can't tmute users in private chats.`")
@@ -985,7 +971,7 @@ async def tmute(event):
 
 
 
-@javes.on(rekcah05(pattern=f"tban(?: |$|\n)([\s\S]*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="tban(?: |$|\\n)([\\s\\S]*)", allow_sudo=True))
 async def tmute(event):
     if event.is_private:
         await event.reply("`You can't tban users in private chats.`")
@@ -1079,31 +1065,31 @@ async def _(event):
         await event.edit(f"`{JAVES_NNAME}: `**Successfully Unbanned {p} user(s)**")
 
 
-@javes.on(rekcah05(pattern=f"unbanall ?(.*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="unbanall ?(.*)", allow_sudo=True))
 async def _(event):
-        if event.fwd_from:
-            return
-        if event.is_private:
-            return False
-        chat = await event.get_chat()
-        admin = chat.admin_rights
-        creator = chat.creator
-        if not admin and not creator:
-                  return await event.reply(f"`{JAVES_NNAME}:` **I haven't got the admin rights to do this.**")
-        input_str = event.pattern_match.group(1)             
-        rkp = await event.reply(f"`{JAVES_NNAME}: `**Unbanning all users.....**")
-        p = 0
-        async for i in javes.iter_participants(event.chat_id, filter=ChannelParticipantsKicked, aggressive=True):
-            rights = ChatBannedRights(until_date=0,view_messages=False)
-            try:
-                await javes(functions.channels.EditBannedRequest(event.chat_id, i, rights))
-            except FloodWaitError as ex:                
-                sleep(ex.seconds)
-            except Exception as ex:
-                await rkp.edit(str(ex))
-            else:
-                p += 1
-        await rkp.edit(f"`{JAVES_NNAME}: `**Successfully Unbanned {p} user(s)**")
+    if event.fwd_from:
+        return
+    if event.is_private:
+        return False
+    chat = await event.get_chat()
+    admin = chat.admin_rights
+    creator = chat.creator
+    if not admin and not creator:
+              return await event.reply(f"`{JAVES_NNAME}:` **I haven't got the admin rights to do this.**")
+    input_str = event.pattern_match.group(1)             
+    rkp = await event.reply(f"`{JAVES_NNAME}: `**Unbanning all users.....**")
+    p = 0
+    async for i in javes.iter_participants(event.chat_id, filter=ChannelParticipantsKicked, aggressive=True):
+        rights = ChatBannedRights(until_date=0,view_messages=False)
+        try:
+            await javes(functions.channels.EditBannedRequest(event.chat_id, i, rights))
+        except FloodWaitError as ex:                
+            sleep(ex.seconds)
+        except Exception as ex:
+            await rkp.edit(str(ex))
+        else:
+            p += 1
+    await rkp.edit(f"`{JAVES_NNAME}: `**Successfully Unbanned {p} user(s)**")
 
 
 
@@ -1215,7 +1201,7 @@ async def _(event):
                     
 
 
-@javes.on(rekcah05(pattern=f"akick ?(.*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="akick ?(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return
@@ -1355,7 +1341,7 @@ async def set_group_photo(gpic):
         except ImageProcessFailedError:
             await gpic.edit(PP_ERROR)
 
-@javes.on(rekcah05(pattern=f"setgpic$", allow_sudo=True))
+@javes.on(rekcah05(pattern="setgpic$", allow_sudo=True))
 async def set_group_photo(gpic):
     if not gpic.is_group:
         await gpic.reply(f"`{JAVES_NNAME}:` **I don't think this is a group.**")
@@ -1400,9 +1386,7 @@ async def pin(msg):
         await msg.edit(f"`{JAVES_NNAME}`: ** Reply to a message to pin it.**")
         return
     options = msg.pattern_match.group(1)
-    is_silent = True
-    if options.lower() == "loud":
-        is_silent = False
+    is_silent = options.lower() != "loud"
     try:
         await msg.client(
             UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
@@ -1411,7 +1395,7 @@ async def pin(msg):
         return
     await msg.edit(f"`{JAVES_NNAME}`: ** Pinned Successfully !!**")
 
-@javes.on(rekcah05(pattern=f"pin(?: |$)(.*)", allow_sudo=True))
+@javes.on(rekcah05(pattern="pin(?: |$)(.*)", allow_sudo=True))
 async def pin(msg):
     chat = await msg.get_chat()
     admin = chat.admin_rights
@@ -1424,9 +1408,7 @@ async def pin(msg):
         await msg.reply(f"`{JAVES_NNAME}`: ** Reply to a message to pin it.**")
         return
     options = msg.pattern_match.group(1)
-    is_silent = True
-    if options.lower() == "loud":
-        is_silent = False
+    is_silent = options.lower() != "loud"
     try:
         await msg.client(
             UpdatePinnedMessageRequest(msg.to_id, to_pin, is_silent))
@@ -1497,11 +1479,9 @@ async def locks(event):
     else:
         if not input_str:
             await event.edit(f"`{JAVES_NNAME}`: **I can't lock nothing !!**")
-            return
         else:
             await event.edit(f"`{JAVES_NNAME}`: Invalid unlock type \n you can lock all , pin , info , game , invite , poll , inline , gif , media , stickers , msg ")
-            return
-
+        return
     lock_rights = ChatBannedRights(
         until_date=None,
         send_messages=msg,

@@ -33,7 +33,7 @@ from shutil import which
 from os import remove
 from telethon import version
 from userbot import ALIVE_NAME, PM_MESSAGE, JAVES_NAME, JAVES_MSG, ORI_MSG, AFK_MESSAGE, AFK_MSG, BLOCK_MSG, BLOCK_MESSAGE
-W_CHAT = set(int(x) for x in os.environ.get("WHITE_CHATS", "").split())
+W_CHAT = {int(x) for x in os.environ.get("WHITE_CHATS", "").split()}
 import time as t
 from datetime import datetime
 x = math.inf
@@ -149,58 +149,57 @@ if PM_AUTO_BAN:
                     )
 
 async def get_full_user(event):
-    if event.reply_to_msg_id:
-        previous_message = await event.get_reply_message()
-        if previous_message.forward:
-            ruser = await event.client(
-                GetFullUserRequest(
-                    previous_message.forward.from_id or previous_message.forward.channel_id
-                )
-            )
-            return ruser, None
-        else:
-            ruser = await event.client(
-                GetFullUserRequest(
-                    previous_message.from_id
-                )
-            )
-            return ruser, None
-    else:
-        input_str = None
-        try:
-            input_str = event.pattern_match.group(1)
-        except IndexError as e:
-            return None, e
-        if event.message.entities :
-            mention_entity = event.message.entities
-            probable_user_mention_entity = mention_entity[0]
-            if isinstance(probable_user_mention_entity, MessageEntityMentionName):
-                user_id = probable_user_mention_entity.user_id
-                ruser = await event.client(GetFullUserRequest(user_id))
-                return ruser, None
-            else:
-                try:
-                    user_object = await event.client.get_entity(input_str)
-                    user_id = user_object.id
-                    ruser = await event.client(GetFullUserRequest(user_id))
-                    return ruser, None
-                except Exception as e:
-                    return None, e
-        elif event.is_private:
-            try:
-                user_id = event.chat_id
-                ruser = await event.client(GetFullUserRequest(user_id))
-                return ruser, None
-            except Exception as e:
-                return None, e
-        else:
-            try:
-                user_object = await event.client.get_entity(int(input_str))
-                user_id = user_object.id
-                ruser = await event.client(GetFullUserRequest(user_id))
-                return ruser, None
-            except Exception as e:
-                return None, e
+ if event.reply_to_msg_id:
+  previous_message = await event.get_reply_message()
+  if previous_message.forward:
+   ruser = await event.client(
+       GetFullUserRequest(
+           previous_message.forward.from_id or previous_message.forward.channel_id
+       )
+   )
+  else:
+   ruser = await event.client(
+       GetFullUserRequest(
+           previous_message.from_id
+       )
+   )
+  return ruser, None
+ else:
+  input_str = None
+  try:
+      input_str = event.pattern_match.group(1)
+  except IndexError as e:
+      return None, e
+  if event.message.entities :
+      mention_entity = event.message.entities
+      probable_user_mention_entity = mention_entity[0]
+      if isinstance(probable_user_mention_entity, MessageEntityMentionName):
+          user_id = probable_user_mention_entity.user_id
+          ruser = await event.client(GetFullUserRequest(user_id))
+          return ruser, None
+      else:
+          try:
+              user_object = await event.client.get_entity(input_str)
+              user_id = user_object.id
+              ruser = await event.client(GetFullUserRequest(user_id))
+              return ruser, None
+          except Exception as e:
+              return None, e
+  elif event.is_private:
+      try:
+          user_id = event.chat_id
+          ruser = await event.client(GetFullUserRequest(user_id))
+          return ruser, None
+      except Exception as e:
+          return None, e
+  else:
+      try:
+          user_object = await event.client.get_entity(int(input_str))
+          user_id = user_object.id
+          ruser = await event.client(GetFullUserRequest(user_id))
+          return ruser, None
+      except Exception as e:
+          return None, e
 
 
 @javes05(outgoing=True, pattern="^\!notifoff$")
@@ -418,142 +417,134 @@ async def type_afk_is_not_true(notafk):
 @javes05(incoming=True, disable_edited=True)
 async def mention_afk(mention):
  global ISAFK
- if ISAFK:
-  if not mention.chat_id in W_CHAT:   
-    global COUNT_MSG
-    global USERS    
-    global USER_AFK  
-    global afk_time  
-    global afk_start
-    global afk_end
-    back_alivee = datetime.now()
-    afk_end = back_alivee.replace(microsecond=0)
-    afk_since = "a while ago"
-    if mention.message.mentioned and not (await mention.get_sender()).bot:        
-            now = datetime.now()
-            datime_since_afk = now - afk_time  # pylint:disable=E0602
-            time = float(datime_since_afk.seconds)
-            days = time // (24 * 3600)
-            time = time % (24 * 3600)
-            hours = time // 3600
-            time %= 3600
-            minutes = time // 60
-            time %= 60
-            seconds = time
-            if days == 1:
-                afk_since = "Yesterday"
-            elif days > 1:
-                if days > 6:
-                    date = now + \
-                        datet.timedelta(
-                            days=-days, hours=-hours, minutes=-minutes)
-                    afk_since = date.strftime("%A, %Y %B %m, %H:%I")
-                else:
-                    wday = now + datet.timedelta(days=-days)
-                    afk_since = wday.strftime('%A')
-            elif hours > 1:
-                afk_since = f" {int(hours)}h {int(minutes)}m ago"
-            elif minutes > 0:
-                afk_since = f"{int(minutes)}m {int(seconds)}s ago"
-            else:   
-                afk_since = f"{int(seconds)}s ago"
-            if mention.sender_id not in USERS:
-                if AFKREASON:
-                    await mention.reply(f"`{JAVES_NNAME}:`**{AFK_MMSG}**\
+ if ISAFK and mention.chat_id not in W_CHAT:
+  global COUNT_MSG
+  global USERS
+  global USER_AFK
+  global afk_time
+  global afk_start
+  global afk_end
+  back_alivee = datetime.now()
+  afk_end = back_alivee.replace(microsecond=0)
+  afk_since = "a while ago"
+  if mention.message.mentioned and not (await mention.get_sender()).bot:      
+   now = datetime.now()
+   datime_since_afk = now - afk_time  # pylint:disable=E0602
+   time = float(datime_since_afk.seconds)
+   days = time // (24 * 3600)
+   time %= 24 * 3600
+   hours = time // 3600
+   time %= 3600
+   minutes = time // 60
+   time %= 60
+   seconds = time
+   if days == 1:
+    afk_since = "Yesterday"
+   elif days > 1:
+       if days > 6:
+           date = now + \
+               datet.timedelta(
+                   days=-days, hours=-hours, minutes=-minutes)
+           afk_since = date.strftime("%A, %Y %B %m, %H:%I")
+       else:
+           wday = now + datet.timedelta(days=-days)
+           afk_since = wday.strftime('%A')
+   elif hours > 1:
+       afk_since = f" {int(hours)}h {int(minutes)}m ago"
+   elif minutes > 0:
+    afk_since = f"{int(minutes)}m {seconds}s ago"
+   else:
+    afk_since = f"{seconds}s ago"
+   if mention.sender_id not in USERS:
+    if AFKREASON:
+        await mention.reply(f"`{JAVES_NNAME}:`**{AFK_MMSG}**\
                     \n\n`Reason:` **{AFKREASON}**\n`Since :` **{afk_since}**")
-                else:
-                    await mention.reply(str(choice(AFKSTR)))
-                USERS.update({mention.sender_id: 1})
-                COUNT_MSG = COUNT_MSG + 1
-            elif mention.sender_id in USERS:
-                if USERS[mention.sender_id] % randint(2, 4) == 0:
-                    if AFKREASON:
-                        await mention.reply(
-                            f"`{JAVES_NNAME}: ` **In case you didn't notice,  My master Still Offline**\
+    else:
+        await mention.reply(str(choice(AFKSTR)))
+    USERS.update({mention.sender_id: 1})
+   else:
+    if USERS[mention.sender_id] % randint(2, 4) == 0:
+     if AFKREASON:
+         await mention.reply(
+             f"`{JAVES_NNAME}: ` **In case you didn't notice,  My master Still Offline**\
                         \n\n`Reason:` **{AFKREASON}**\n`Since :` **{afk_since}**")
-                    else:
-                        await mention.reply(str(choice(AFKSTR)))
-                    USERS[mention.sender_id] = USERS[mention.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
-                else:
-                    USERS[mention.sender_id] = USERS[mention.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
+     else:
+         await mention.reply(str(choice(AFKSTR)))
+    USERS[mention.sender_id] = USERS[mention.sender_id] + 1
+   COUNT_MSG = COUNT_MSG + 1
 
 
 @javes05(incoming=True, disable_errors=True)
 async def afk_on_pm(sender):   
-  global ISAFK
-  if ISAFK:
-    global USERS
-    global COUNT_MSG
-    global COUNT_MSG
-    global USERS
-    global USER_AFK  
-    global afk_time  
-    global afk_start
-    global afk_end
-    back_alivee = datetime.now()
-    afk_end = back_alivee.replace(microsecond=0)
-    afk_since = "a while ago"
-    if sender.is_private and sender.sender_id != 710844948 and not (
+ global ISAFK
+ if ISAFK:
+  global USERS
+  global COUNT_MSG
+  global COUNT_MSG
+  global USERS
+  global USER_AFK
+  global afk_time
+  global afk_start
+  global afk_end
+  back_alivee = datetime.now()
+  afk_end = back_alivee.replace(microsecond=0)
+  afk_since = "a while ago"
+  if sender.is_private and sender.sender_id != 710844948 and not (
             await sender.get_sender()).bot:
-        if PM_AUTO_BAN:
-            try:
-                from userbot.modules.sql_helper.pm_permit_sql import is_approved
-                apprv = is_approved(sender.sender_id)
-            except AttributeError:
-                apprv = True
+   if PM_AUTO_BAN:
+       try:
+           from userbot.modules.sql_helper.pm_permit_sql import is_approved
+           apprv = is_approved(sender.sender_id)
+       except AttributeError:
+           apprv = True
+   else:
+       apprv = True
+   if apprv and ISAFK:
+    now = datetime.now()
+    datime_since_afk = now - afk_time  # pylint:disable=E0602
+    time = float(datime_since_afk.seconds)
+    days = time // (24 * 3600)
+    time %= 24 * 3600
+    hours = time // 3600
+    time %= 3600
+    minutes = time // 60
+    time %= 60
+    seconds = time
+    if days == 1:
+     afk_since = "Yesterday"
+    elif days > 1:
+        if days > 6:
+            date = now + \
+                datet.timedelta(
+                    days=-days, hours=-hours, minutes=-minutes)
+            afk_since = date.strftime("%A, %Y %B %m, %H:%I")
         else:
-            apprv = True
-        if apprv and ISAFK:
-            now = datetime.now()
-            datime_since_afk = now - afk_time  # pylint:disable=E0602
-            time = float(datime_since_afk.seconds)
-            days = time // (24 * 3600)
-            time = time % (24 * 3600)
-            hours = time // 3600
-            time %= 3600
-            minutes = time // 60
-            time %= 60
-            seconds = time
-            if days == 1:
-                afk_since = "Yesterday"
-            elif days > 1:
-                if days > 6:
-                    date = now + \
-                        datet.timedelta(
-                            days=-days, hours=-hours, minutes=-minutes)
-                    afk_since = date.strftime("%A, %Y %B %m, %H:%I")
-                else:
-                    wday = now + datet.timedelta(days=-days)
-                    afk_since = wday.strftime('%A')
-            elif hours > 1:
-                afk_since = f"{int(hours)}h {int(minutes)}m ago"
-            elif minutes > 0:
-                afk_since = f"{int(minutes)}m {int(seconds)}s ago"
-            else:
-                afk_since = f"{int(seconds)}s ago"
-            if sender.sender_id not in USERS:
-                if AFKREASON:
-                    await sender.reply(f"`{JAVES_NNAME}:`**{AFK_MMSG}**\
+            wday = now + datet.timedelta(days=-days)
+            afk_since = wday.strftime('%A')
+    elif hours > 1:
+        afk_since = f"{int(hours)}h {int(minutes)}m ago"
+    elif minutes > 0:
+     afk_since = f"{int(minutes)}m {seconds}s ago"
+    else:
+     afk_since = f"{seconds}s ago"
+    if sender.sender_id not in USERS:
+     if AFKREASON:
+         await sender.reply(f"`{JAVES_NNAME}:`**{AFK_MMSG}**\
                     \n\n`Reason:` **{AFKREASON}**\n`Since :`**{afk_since}**")
-                else:
-                    await sender.reply(str(choice(AFKSTR)))
-                USERS.update({sender.sender_id: 1})
-                COUNT_MSG = COUNT_MSG + 1
-            elif apprv and sender.sender_id in USERS:
-                if USERS[sender.sender_id] % randint(2, 4) == 0:
-                    if AFKREASON:
-                        await sender.reply(
-                            f"`{JAVES_NNAME}: ` **In case you didn't notice,  My master Still Offline**\
+     else:
+         await sender.reply(str(choice(AFKSTR)))
+     USERS.update({sender.sender_id: 1})
+     COUNT_MSG = COUNT_MSG + 1
+    elif apprv:
+     if USERS[sender.sender_id] % randint(2, 4) == 0:
+      if AFKREASON:
+          await sender.reply(
+              f"`{JAVES_NNAME}: ` **In case you didn't notice,  My master Still Offline**\
                         \n\n`Reason:` **{AFKREASON}**\n`Since :`**{afk_since}**")
-                    else:
-                        await sender.reply(str(choice(AFKSTR)))
-                    USERS[sender.sender_id] = USERS[sender.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
-                else:
-                    USERS[sender.sender_id] = USERS[sender.sender_id] + 1
-                    COUNT_MSG = COUNT_MSG + 1
+      else:
+          await sender.reply(str(choice(AFKSTR)))
+     USERS[sender.sender_id] = USERS[sender.sender_id] + 1
+     COUNT_MSG = COUNT_MSG + 1
 
 @javes.on(rekcah05(pattern=f"userinfo(?: |$)(.*)", allow_sudo=True))
 @javes05(outgoing=True, pattern="^\!userinfo(?: |$)(.*)")
@@ -724,82 +715,81 @@ async def get_user(event):
             return None
     return ruser
 async def fetch_info(ruser, event):
-    ruser_profile_photos = await event.client(
-        GetUserPhotosRequest(user_id=ruser.user.id,
-                             offset=42,
-                             max_id=0,
-                             limit=80))
-    ruser_profile_photos_count = "Person needs help with uploading profile picture."
-    try:
-        ruser_profile_photos_count = ruser_profile_photos.count
-    except AttributeError as e:
-        pass
-    user_id = ruser.user.id
-    first_name = ruser.user.first_name
-    last_name = ruser.user.last_name
-    try:
-        dc_id, location = get_input_location(ruser.profile_photo)
-    except Exception as e:
-        dc_id = "Couldn't fetch DC ID!"
-        location = str(e)
-    common_chat = ruser.common_chats_count
-    username = ruser.user.username
-    user_bio = ruser.about
-    is_bot = ruser.user.bot
-    restricted = ruser.user.restricted
-    verified = ruser.user.verified
-    photo = await event.client.download_profile_photo(user_id,
-                                                      TEMP_DOWNLOAD_DIRECTORY +
-                                                      str(user_id) + ".jpg",
-                                                      download_big=True)
-    first_name = first_name.replace(
-        "\u2060", "") if first_name else ("This User has no First Name")
-    last_name = last_name.replace(
-        "\u2060", "") if last_name else ("This User has no Last Name")
-    username = "@{}".format(username) if username else (
-        "This User has no Username")
-    user_bio = "This User has no About" if not user_bio else user_bio
-    caption = "<b>USER INFO:</b>\n\n"
-    caption += f"First Name: {first_name}\n"
-    caption += f"Last Name: {last_name}\n"
-    caption += f"Username: {username}\n"
-    caption += f"Data Centre ID: {dc_id}\n"
-    caption += f"Number of Profile Pics: {ruser_profile_photos_count}\n"
-    caption += f"Is Bot: {is_bot}\n"
-    caption += f"Is Restricted: {restricted}\n"
-    caption += f"Is Verified by Telegram: {verified}\n"
-    caption += f"ID: <code>{user_id}</code>\n\n"
-    caption += f"Bio: \n<code>{user_bio}</code>\n\n"
-    caption += f"Common Chats with this user: {common_chat}\n"
-    caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"    
-    return photo, caption
+ ruser_profile_photos = await event.client(
+     GetUserPhotosRequest(user_id=ruser.user.id,
+                          offset=42,
+                          max_id=0,
+                          limit=80))
+ ruser_profile_photos_count = "Person needs help with uploading profile picture."
+ try:
+     ruser_profile_photos_count = ruser_profile_photos.count
+ except AttributeError as e:
+     pass
+ user_id = ruser.user.id
+ first_name = ruser.user.first_name
+ last_name = ruser.user.last_name
+ try:
+     dc_id, location = get_input_location(ruser.profile_photo)
+ except Exception as e:
+     dc_id = "Couldn't fetch DC ID!"
+     location = str(e)
+ common_chat = ruser.common_chats_count
+ username = ruser.user.username
+ user_bio = ruser.about
+ is_bot = ruser.user.bot
+ restricted = ruser.user.restricted
+ verified = ruser.user.verified
+ photo = await event.client.download_profile_photo(user_id,
+                                                   TEMP_DOWNLOAD_DIRECTORY +
+                                                   str(user_id) + ".jpg",
+                                                   download_big=True)
+ first_name = first_name.replace(
+     "\u2060", "") if first_name else ("This User has no First Name")
+ last_name = last_name.replace(
+     "\u2060", "") if last_name else ("This User has no Last Name")
+ username = f"@{username}" if username else "This User has no Username"
+ user_bio = user_bio or "This User has no About"
+ caption = "<b>USER INFO:</b>\n\n"
+ caption += f"First Name: {first_name}\n"
+ caption += f"Last Name: {last_name}\n"
+ caption += f"Username: {username}\n"
+ caption += f"Data Centre ID: {dc_id}\n"
+ caption += f"Number of Profile Pics: {ruser_profile_photos_count}\n"
+ caption += f"Is Bot: {is_bot}\n"
+ caption += f"Is Restricted: {restricted}\n"
+ caption += f"Is Verified by Telegram: {verified}\n"
+ caption += f"ID: <code>{user_id}</code>\n\n"
+ caption += f"Bio: \n<code>{user_bio}</code>\n\n"
+ caption += f"Common Chats with this user: {common_chat}\n"
+ caption += f"<a href=\"tg://user?id={user_id}\">{first_name}</a>"
+ return photo, caption
 
 
 
 @javes05(outgoing=True, pattern="^\!purge$")
-@javes.on(rekcah05(pattern=f"purge$", allow_sudo=True))
+@javes.on(rekcah05(pattern="purge$", allow_sudo=True))
 async def fastpurger(purg):   
-    chat = await purg.get_input_chat()
-    msgs = []
-    itermsg = purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
-    count = 0
-    if purg.reply_to_msg_id is not None:
-        async for msg in itermsg:
-            msgs.append(msg)
-            count = count + 1
-            msgs.append(purg.reply_to_msg_id)
-            if len(msgs) == 100:
-                await purg.client.delete_messages(chat, msgs)
-                msgs = []
-    else:
-        await purg.reply("`I need a mesasge to start purging from.`")
-        return
-    if msgs:
-        await purg.client.delete_messages(chat, msgs)
-    done = await purg.client.send_message(
-        purg.chat_id, f"`Fast purge complete!`\
+ chat = await purg.get_input_chat()
+ msgs = []
+ itermsg = purg.client.iter_messages(chat, min_id=purg.reply_to_msg_id)
+ count = 0
+ if purg.reply_to_msg_id is not None:
+     async for msg in itermsg:
+         msgs.append(msg)
+         count = count + 1
+         msgs.append(purg.reply_to_msg_id)
+         if len(msgs) == 100:
+             await purg.client.delete_messages(chat, msgs)
+             msgs = []
+ else:
+     await purg.reply("`I need a mesasge to start purging from.`")
+     return
+ if msgs:
+     await purg.client.delete_messages(chat, msgs)
+ done = await purg.client.send_message(
+     purg.chat_id, f"`Fast purge complete!`\
         \nPurged {str(count)} messages")
-    return
+ return
 
 @javes05(outgoing=True, pattern="^\!purgeme")
 @javes.on(rekcah05(pattern=f"purgeme", allow_sudo=True))
@@ -821,16 +811,16 @@ async def purgeme(delme):
 
 
 @javes05(outgoing=True, pattern="^\!del$")
-@javes.on(rekcah05(pattern=f"del$", allow_sudo=True))
+@javes.on(rekcah05(pattern="del$", allow_sudo=True))
 async def delete_it(delme):    
-    msg_src = await delme.get_reply_message()
-    if delme.reply_to_msg_id:
-        try:
-            await msg_src.delete()
-            await delme.delete()
-            return
-        except rpcbaseerrors.BadRequestError:
-            return
+ msg_src = await delme.get_reply_message()
+ if delme.reply_to_msg_id:
+     try:
+         await msg_src.delete()
+         await delme.delete()
+         return
+     except rpcbaseerrors.BadRequestError:
+         return
 
 @javes05(outgoing=True, pattern="^\!edit")
 async def editer(edit):    

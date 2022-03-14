@@ -14,10 +14,10 @@ async def _(event):
     if event.fwd_from:
         return
     lightning_anmation_interval = 4
-    ttl = range(0, 29)
+    ttl = range(29)
     await event.edit("Wishing You a Happy new year to all...")
     chars = [
-        f"**Hello!👋**",
+        "**Hello!👋**",
         "**Happy New Year To All❤️❤️**",
         f"**{DEFAULTUSER} \nHappy Year Master**",
         "[Happy New Year](https://telegra.ph/file/0682331f14d753862d81e.mp4)",
@@ -35,19 +35,20 @@ async def _(event):
         "[Some Gifts](https://media.giphy.com/media/3j4QTXSIKRfPCgvVIL/giphy.gif)",
         "[Some Gifts](https://media.giphy.com/media/s2qXK8wAvkHTO/giphy.gif)",
         "[Some Gifts](https://telegra.ph/file/0c3f83a170e28b30316ae.mp4)",
-        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",  
+        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",
         f"Once Again Happy New Year To All By {DEFAULTUSER}😘😘😘",
-        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️", 
+        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",
         f"Once Again Happy New Year To All By {DEFAULTUSER}💜💜💜",
-        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",  
-        f"Once Again Happy New Year To All By {DEFAULTUSER}💛💛💛",     
-        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",  
-        f"Once Again Happy New Year To All By {DEFAULTUSER}🧡🧡🧡",      
+        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",
+        f"Once Again Happy New Year To All By {DEFAULTUSER}💛💛💛",
+        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",
+        f"Once Again Happy New Year To All By {DEFAULTUSER}🧡🧡🧡",
         f"Once Again Happy New Year To All By {DEFAULTUSER}💙💙💙",
-        f"Once Again Happy New Year To All By {DEFAULTUSER}💚💚💚",  
-        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",  
+        f"Once Again Happy New Year To All By {DEFAULTUSER}💚💚💚",
+        f"Once Again Happy New Year To All By {DEFAULTUSER}❤️❤️❤️",
         f"Once Again Happy New Year To All By {DEFAULTUSER}**💖💖💖",
-        ]
+    ]
+
 
     for i in ttl:  
 

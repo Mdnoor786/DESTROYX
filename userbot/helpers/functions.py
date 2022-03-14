@@ -30,7 +30,7 @@ async def get_readable_time(seconds: int) -> str:
     for x in range(hmm):
         time_list[x] = str(time_list[x]) + time_suffix_list[x]
     if len(time_list) == 4:
-        up_time += time_list.pop() + ", "
+        up_time += f'{time_list.pop()}, '
     time_list.reverse()
     up_time += ":".join(time_list)
     return up_time
@@ -59,12 +59,13 @@ async def yt_search(cat):
     try:
         cat = urllib.parse.quote(cat)
         html = urllib.request.urlopen(
-            "https://www.youtube.com/results?search_query=" + cat
+            f"https://www.youtube.com/results?search_query={cat}"
         )
-        user_data = re.findall(r"watch\?v=(\S{11})", html.read().decode())
-        video_link = None
-        if user_data:
-            video_link = "https://www.youtube.com/watch?v=" + user_data[0]
+
+        if user_data := re.findall(r"watch\?v=(\S{11})", html.read().decode()):
+            video_link = f"https://www.youtube.com/watch?v={user_data[0]}"
+        else:
+            video_link = None
         if video_link:
             return video_link
         return "Couldnt fetch results"
@@ -117,10 +118,9 @@ async def extract_time(cat, time_val):
             return ""
         return bantime
     cat.edit(
-        "Invalid time type specified. Expected m , h , d or w but got: {}".format(
-            time_val[-1]
-        )
+        f"Invalid time type specified. Expected m , h , d or w but got: {time_val[-1]}"
     )
+
     return ""
 
 
@@ -184,10 +184,7 @@ async def convert_tosticker(image):
 async def covidindia(state):
     url = "https://www.mohfw.gov.in/data/datanew.json"
     req = requests.get(url).json()
-    for i in states:
-        if i == state:
-            return req[states.index(i)]
-    return None
+    return next((req[states.index(i)] for i in states if i == state), None)
 
 
 # for nekobot

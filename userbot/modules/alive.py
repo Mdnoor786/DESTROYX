@@ -2,7 +2,7 @@ import platform
 import sys
 from telethon import version
 from userbot import (HEROKU_APP_NAME, HEROKU_API_KEY, CMD_HELP, BOTLOG, BOTLOG_CHATID, JAVES_NAME, ALIVE_NAME, YOUR_SHORT_NAME)
-from userbot.events import javes05, rekcah05 
+from userbot.events import javes05, rekcah05
 import os
 shivam = os.environ.get("ALIVE_PIC",None)
 if not shivam:
@@ -37,28 +37,18 @@ S3_USER = os.environ.get("S3_USER", DEFAULTUSER)
 v = "0.0.1"
 
 if rksu:
- if FULL_SUDO:
-    sudork = 'Full access'
- else:
-    sudork = 'Normal access'
+	sudork = 'Full access' if FULL_SUDO else 'Normal access'
 else:
 	sudork = 'NotSet'
 
 
-if SPAM_PROTECT:
-	ss = "True"
-else:
-	ss = "False"
-
+ss = "True" if SPAM_PROTECT else "False"
 try:
-   Heroku = heroku3.from_key(HEROKU_API_KEY)                         
-   app = Heroku.app(HEROKU_APP_NAME)
-   herokurk = 'connected'
+	Heroku = heroku3.from_key(HEROKU_API_KEY)                         
+	app = Heroku.app(HEROKU_APP_NAME)
+	herokurk = 'connected'
 except:
 	herokurk = '[Failed to connect](https://telegra.ph/RkPavi-06-09-6)'
-	pass
-
-
 if BOTLOG_CHATID:
 	logrk = 'connected'
 else:
@@ -134,21 +124,21 @@ async def alive(alive):
 
 
 
-@bot.on(rekcah05(pattern=f"sudo$", allow_sudo=True))
-@bot.on(rekcah05(pattern=f"destroyx$", allow_sudo=True))
+@bot.on(rekcah05(pattern="sudo$", allow_sudo=True))
+@bot.on(rekcah05(pattern="destroyx$", allow_sudo=True))
 async def alive(alive):
-    text=(""
-                    f"**{ALIVE_S_MMSG}**\n\n"                     
-                    f" °  `{JAVES_NNAME}`: **{v}**\n"
-                    f" °  `Sudo Id:` ** {rksu} **\n"
-                    f" °  `Telethon`: ** {version.__version__} **\n"
-                    f" °  `Python` : ** {platform.python_version()} **\n"                                                                                     
-                    f" °  `Os:` ** Kali GNU/Linux Rolling x86_64   **\n"                                       
-                    f" °  `Heroku:` ** {herokurk} **\n"
-                    f" °  `LogChat:` ** {logrk} **\n"
-                    f" °  `Sudo:` ** {sudork} **\n"
-                    f" °  `SpamProtect:` ** {ss} **\n"                    
-                    f" °  `Uptime:` ** {str(datetime.now() - START_TIME).split('.')[0]} **\n\n"                                   
-                    f"**{ALIVE_E_MMSG}**")
-    await alive.client.send_file(alive.chat_id, shivam,caption=text, force_document=False)
-    await alive.delete()
+	text=(""
+	                f"**{ALIVE_S_MMSG}**\n\n"                     
+	                f" °  `{JAVES_NNAME}`: **{v}**\n"
+	                f" °  `Sudo Id:` ** {rksu} **\n"
+	                f" °  `Telethon`: ** {version.__version__} **\n"
+	                f" °  `Python` : ** {platform.python_version()} **\n"                                                                                     
+	                f" °  `Os:` ** Kali GNU/Linux Rolling x86_64   **\n"                                       
+	                f" °  `Heroku:` ** {herokurk} **\n"
+	                f" °  `LogChat:` ** {logrk} **\n"
+	                f" °  `Sudo:` ** {sudork} **\n"
+	                f" °  `SpamProtect:` ** {ss} **\n"                    
+	                f" °  `Uptime:` ** {str(datetime.now() - START_TIME).split('.')[0]} **\n\n"                                   
+	                f"**{ALIVE_E_MMSG}**")
+	await alive.client.send_file(alive.chat_id, shivam,caption=text, force_document=False)
+	await alive.delete()

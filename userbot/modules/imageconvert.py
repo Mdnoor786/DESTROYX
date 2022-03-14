@@ -4,6 +4,7 @@ Syntax:
 .rnupload file.name
 .rnstreamupload file.name
 By @Ck_ATR"""
+
 from userbot import bot as javes
 import aiohttp
 import asyncio
@@ -26,23 +27,21 @@ from pySmartDL import SmartDL
 from userbot.javes_main.heroku_var import *
 config=Config
 
-thumb_image_path = Config.TEMP_DOWNLOAD_DIRECTORY + "/thumb_image.jpeg"
+thumb_image_path = f'{Config.TEMP_DOWNLOAD_DIRECTORY}/thumb_image.jpeg'
 
 
 @javes.on(admin_cmd("pti (.*)"))
 async def _(event):
     if event.fwd_from:
         return
-    thumb = None
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
+    thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     await event.edit("Rename & Upload in process 🙄🙇‍♂️🙇‍♂️🙇‍♀️ It might take some time if file size is big")
     input_str = event.pattern_match.group(1)
     if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         start = datetime.now()
-        file_name = input_str + ".ico"
+        file_name = f'{input_str}.ico'
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TEMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
@@ -62,14 +61,17 @@ async def _(event):
                 allow_cache=False,
                 reply_to=event.message.id,
                 thumb=thumb,
-                
+
             )
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_one, ms_two))
+            await event.edit(
+                f"Downloaded in {ms_one} seconds. Uploaded in {ms_two} seconds."
+            )
+
         else:
-            await event.edit("File Not Found {}".format(input_str))
+            await event.edit(f"File Not Found {input_str}")
     else:
         await event.edit("Syntax // .pti<name>  as reply to a photo")
         
@@ -77,16 +79,14 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    thumb = None
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
+    thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     await event.edit("Rename & Upload in process 🙄🙇‍♂️🙇‍♂️🙇‍♀️ It might take some time if file size is big")
     input_str = event.pattern_match.group(1)
     if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         start = datetime.now()
-        file_name = input_str + ".webp"
+        file_name = f'{input_str}.webp'
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TEMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
@@ -106,14 +106,17 @@ async def _(event):
                 allow_cache=False,
                 reply_to=event.message.id,
                 thumb=thumb,
-                
+
             )
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_one, ms_two))
+            await event.edit(
+                f"Downloaded in {ms_one} seconds. Uploaded in {ms_two} seconds."
+            )
+
         else:
-            await event.edit("File Not Found {}".format(input_str))
+            await event.edit(f"File Not Found {input_str}")
     else:
         await event.edit("Syntax // .pts<name> as reply to a Telegram media")
         
@@ -121,16 +124,14 @@ async def _(event):
 async def _(event):
     if event.fwd_from:
         return
-    thumb = None
-    if os.path.exists(thumb_image_path):
-        thumb = thumb_image_path
+    thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     await event.edit("Rename & Upload in process 🙄🙇‍♂️🙇‍♂️🙇‍♀️ It might take some time if file size is big")
     input_str = event.pattern_match.group(1)
     if not os.path.isdir(Config.TEMP_DOWNLOAD_DIRECTORY):
         os.makedirs(Config.TEMP_DOWNLOAD_DIRECTORY)
     if event.reply_to_msg_id:
         start = datetime.now()
-        file_name = input_str + ".gif"
+        file_name = f'{input_str}.gif'
         reply_message = await event.get_reply_message()
         to_download_directory = Config.TEMP_DOWNLOAD_DIRECTORY
         downloaded_file_name = os.path.join(to_download_directory, file_name)
@@ -150,13 +151,16 @@ async def _(event):
                 allow_cache=False,
                 reply_to=event.message.id,
                 thumb=thumb,
-                
+
             )
             end_two = datetime.now()
             os.remove(downloaded_file_name)
             ms_two = (end_two - end).seconds
-            await event.edit("Downloaded in {} seconds. Uploaded in {} seconds.".format(ms_one, ms_two))
+            await event.edit(
+                f"Downloaded in {ms_one} seconds. Uploaded in {ms_two} seconds."
+            )
+
         else:
-            await event.edit("File Not Found {}".format(input_str))
+            await event.edit(f"File Not Found {input_str}")
     else:
         await event.edit("Syntax // .vtg<name> as reply to a Telegram video")
