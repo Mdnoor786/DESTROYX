@@ -22,35 +22,39 @@ class Joinpoke(BASE):
 
 Joinpoke.__table__.create(checkfirst=True)
 
+
 def get_poke(chat_id):
     try:
         return SESSION.query(Joinpoke).get(str(chat_id))
     finally:
         SESSION.close()
+
+
 def getpoke(chat_id):
     try:
         return SESSION.query(Joinpoke).get(str(chat_id))
     finally:
         SESSION.close()
 
+
 def get_current_poke_settings(chat_id):
     try:
-        return (
-            SESSION.query(Joinpoke).filter(Joinpoke.chat_id == str(chat_id)).one()
-        )
+        return SESSION.query(Joinpoke).filter(Joinpoke.chat_id == str(chat_id)).one()
     except BaseException:
         return None
     finally:
         SESSION.close()
+
+
 def getcurrent_poke_settings(chat_id):
     try:
-        return (
-            SESSION.query(Joinpoke).filter(Joinpoke.chat_id == str(chat_id)).one()
-        )
+        return SESSION.query(Joinpoke).filter(Joinpoke.chat_id == str(chat_id)).one()
     except BaseException:
         return None
     finally:
         SESSION.close()
+
+
 def add_poke_setting(chat_id, previous_poke, reply, f_mesg_id):
     to_check = getpoke(chat_id)
     if not to_check:
@@ -64,6 +68,7 @@ def add_poke_setting(chat_id, previous_poke, reply, f_mesg_id):
     adder = Joinpoke(chat_id, previous_poke, reply, f_mesg_id)
     SESSION.commit()
     return False
+
 
 def addpoke_setting(chat_id, previous_poke, reply, f_mesg_id):
     to_check = getpoke(chat_id)
@@ -79,6 +84,7 @@ def addpoke_setting(chat_id, previous_poke, reply, f_mesg_id):
     SESSION.commit()
     return False
 
+
 def rm_poke_setting(chat_id):
     try:
         rem = SESSION.query(Joinpoke).get(str(chat_id))
@@ -88,6 +94,7 @@ def rm_poke_setting(chat_id):
             return True
     except BaseException:
         return False
+
 
 def rmpoke_setting(chat_id):
     try:
@@ -99,10 +106,13 @@ def rmpoke_setting(chat_id):
     except BaseException:
         return False
 
+
 def update_previous_poke(chat_id, previous_poke):
     row = SESSION.query(Joinpoke).get(str(chat_id))
     row.previous_poke = previous_poke
     SESSION.commit()
+
+
 def updateprevious_poke(chat_id, previous_poke):
     row = SESSION.query(Joinpoke).get(str(chat_id))
     row.previous_poke = previous_poke

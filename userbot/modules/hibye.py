@@ -1,12 +1,11 @@
 """
 Available Commands:
 .HI"""
-from userbot import bot as javes
-from telethon import events
-
 import asyncio
 
+from userbot import bot as javes
 from userbot.utils import admin_cmd
+
 
 @javes.on(admin_cmd("hibye"))
 async def _(event):
@@ -16,24 +15,22 @@ async def _(event):
     animation_ttl = range(36)
     await event.edit("!hey")
     animation_chars = [
-            "OK",
-            "HELLO",
-            "HI",
-            "KOI HAI",
-            "ETNA SANNATA Q HAI BHAI",
-            "🥺🥺🥺",
-            "ETNA CHUP Q HO",
-            "🤨🤨🤨🤨🤨",
-            "🖕🏻🖕🏻🖕🏻🖕🏻🖕🏻",
-            "🤔🤔🤔🤔🤔",
-            "👋👋👋",
-            "chalo me bhi chala"
-            "BYE BYE",
-            "🥺🥺🥺🥺🥺",
-            "👋",
-            "Love You From Heart ❤",
-
-        ]
+        "OK",
+        "HELLO",
+        "HI",
+        "KOI HAI",
+        "ETNA SANNATA Q HAI BHAI",
+        "🥺🥺🥺",
+        "ETNA CHUP Q HO",
+        "🤨🤨🤨🤨🤨",
+        "🖕🏻🖕🏻🖕🏻🖕🏻🖕🏻",
+        "🤔🤔🤔🤔🤔",
+        "👋👋👋",
+        "chalo me bhi chala" "BYE BYE",
+        "🥺🥺🥺🥺🥺",
+        "👋",
+        "Love You From Heart ❤",
+    ]
 
     for i in animation_ttl:
 

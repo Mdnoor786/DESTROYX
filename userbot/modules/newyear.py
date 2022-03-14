@@ -3,9 +3,11 @@
 # Cat userbot owner sandeep chakka hai yaad rakhna 😂
 
 import asyncio
-from  userbot import ALIVE_NAME
-from userbot.utils import admin_cmd
+
+from userbot import ALIVE_NAME
 from userbot import bot as borg
+from userbot.utils import admin_cmd
+
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Unknown"
 
 
@@ -49,10 +51,7 @@ async def _(event):
         f"Once Again Happy New Year To All By {DEFAULTUSER}**💖💖💖",
     ]
 
-
-    for i in ttl:  
+    for i in ttl:
 
         await asyncio.sleep(lightning_anmation_interval)
-        await event.edit(
-            chars[i % 30], link_preview=True
-        )
+        await event.edit(chars[i % 30], link_preview=True)

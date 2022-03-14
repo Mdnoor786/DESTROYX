@@ -1,9 +1,10 @@
 # ported from telebot
-# i ported from shivam's project :) 
+# i ported from shivam's project :)
 
 from userbot import CMD_HELP
-from userbot.utils import admin_cmd
 from userbot import bot as borg
+from userbot.utils import admin_cmd
+
 
 @borg.on(admin_cmd(pattern="pmto ?(.*)"))
 async def pmto(event):
@@ -14,7 +15,7 @@ async def pmto(event):
         chat_id = int(chat_id)
     except BaseException:
         pass
-    msg = "".join(f'{i} ' for i in b[1:])
+    msg = "".join(f"{i} " for i in b[1:])
     if msg == "":
         return
     try:

@@ -1,15 +1,11 @@
 import os
+
 cIient = "@DXplugins"
 cIientt = "@DXplugins"
-import asyncio
-from sys import version_info
-from logging import *
 from distutils.util import strtobool as sb
-from pySmartDL import SmartDL
+
 from dotenv import load_dotenv
-from requests import get
-from telethon import TelegramClient
-from telethon.sessions import StringSession
+
 load_dotenv("config.env")
 from distutils.util import strtobool as sb
 
@@ -18,7 +14,7 @@ class config(object):
     API_KEY = os.environ.get("TELEGRAM_API_KEY", None)
     APP_ID = os.environ.get("TELEGRAM_API_KEY", None)
     API_HASH = os.environ.get("TELEGRAM_API_HASH", None)
-    TAG_LOG =int(os.environ.get("TAG_LOG",None))
+    TAG_LOG = int(os.environ.get("TAG_LOG", None))
     STRING_SESSION = os.environ.get("TELEGRAM_STRING_SESSION", None)
     SCREEN_SHOT_KEY = os.environ.get("SCREEN_SHOT_KEY", None)
     SCREEN_SHOT_LAYER_ACCESS_KEY = SCREEN_SHOT_KEY
@@ -45,7 +41,7 @@ class config(object):
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     PM_AUTO_BAN = sb(os.environ.get("PM_PROTECTOR", "True"))
-    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY","./downloads")
+    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads")
     LOGGER = True
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
@@ -63,7 +59,9 @@ class config(object):
     HEROKU_APP_NAME = os.environ.get("HEROKU_APPNAME", None)
     HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY", None)
     HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME", None)
-    UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL","https://github.com/CRiMiNaL786/DESTROYX")
+    UPSTREAM_REPO_URL = os.environ.get(
+        "UPSTREAM_REPO_URL", "https://github.com/CRiMiNaL786/DESTROYX"
+    )
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "Javes")
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     TG_BOT_TOKEN_BF_HER = os.environ.get("TG_BOT_TOKEN_BF_HER", None)
@@ -81,14 +79,13 @@ class config(object):
     MAX_FLOOD_IN_P_M_s = int(os.environ.get("MAX_FLOOD_IN_P_M_s", 3))
     PRIVATE_GROUP_ID = os.environ.get("BOTLOG_CHATID", None)
     DB_URI = os.environ.get("DATABASE_URL", None)
-    TAG_LOG =int(os.environ.get("TAG_LOG",None))
-    TMP_DOWNLOAD_DIRECTORY=TEMP_DOWNLOAD_DIRECTORY
-
+    TAG_LOG = int(os.environ.get("TAG_LOG", None))
+    TMP_DOWNLOAD_DIRECTORY = TEMP_DOWNLOAD_DIRECTORY
 
 
 class Config(object):
     API_KEY = os.environ.get("TELEGRAM_API_KEY", None)
-    TAG_LOG =int(os.environ.get("TAG_LOG",None))
+    TAG_LOG = int(os.environ.get("TAG_LOG", None))
     APP_ID = os.environ.get("TELEGRAM_API_KEY", None)
     API_HASH = os.environ.get("TELEGRAM_API_HASH", None)
     STRING_SESSION = os.environ.get("TELEGRAM_STRING_SESSION", None)
@@ -113,7 +110,7 @@ class Config(object):
     DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     PM_AUTO_BAN = sb(os.environ.get("PM_PROTECTOR", "True"))
-    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY","./downloads")
+    TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY", "./downloads")
     LOGGER = True
     GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", None)
     GIT_REPO_NAME = os.environ.get("GIT_REPO_NAME", None)
@@ -131,7 +128,9 @@ class Config(object):
     HEROKU_APP_NAME = os.environ.get("HEROKU_APPNAME", None)
     HEROKU_APIKEY = os.environ.get("HEROKU_APIKEY", None)
     HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME", None)
-    UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL","https://github.com/CRiMiNaL786/DESTROYX")
+    UPSTREAM_REPO_URL = os.environ.get(
+        "UPSTREAM_REPO_URL", "https://github.com/CRiMiNaL786/DESTROYX"
+    )
     TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "Javes")
     CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
     TG_BOT_TOKEN_BF_HER = os.environ.get("TG_BOT_TOKEN_BF_HER", None)
@@ -150,12 +149,10 @@ class Config(object):
     PRIVATE_GROUP_ID = os.environ.get("BOTLOG_CHATID", None)
     DB_URI = os.environ.get("DATABASE_URL", None)
     SCREEN_SHOT_KEY = os.environ.get("SCREEN_SHOT_KEY", None)
-    TAG_LOG =int(os.environ.get("TAG_LOG",None))
+    TAG_LOG = int(os.environ.get("TAG_LOG", None))
     SCREEN_SHOT_LAYER_ACCESS_KEY = SCREEN_SHOT_KEY
-    TMP_DOWNLOAD_DIRECTORY=TEMP_DOWNLOAD_DIRECTORY
+    TMP_DOWNLOAD_DIRECTORY = TEMP_DOWNLOAD_DIRECTORY
+
 
 class Development(config):
     LOGGER = True
-
-
-

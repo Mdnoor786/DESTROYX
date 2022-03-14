@@ -1,9 +1,8 @@
-
-from telethon import events
-from userbot import bot as javes
 import asyncio
 
+from userbot import bot as javes
 from userbot.utils import admin_cmd
+
 
 @javes.on(admin_cmd("evil"))
 async def _(event):
@@ -16,12 +15,12 @@ async def _(event):
 
     await event.edit("☠️EVIL IS WAKE UP...HA...HA...HA ...👽‼️👾")
     animation_chars = [
-            "😈",
-            "👿",
-            "🎃",
-            "💀",
-            "👻",
-            ]
+        "😈",
+        "👿",
+        "🎃",
+        "💀",
+        "👻",
+    ]
 
     for i in animation_ttl:
 

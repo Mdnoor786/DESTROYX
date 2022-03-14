@@ -1,9 +1,8 @@
-
-from telethon import events
-from userbot import bot as javes
 import asyncio
 
+from userbot import bot as javes
 from userbot.utils import admin_cmd
+
 
 @javes.on(admin_cmd("luul"))
 async def _(event):
@@ -13,9 +12,9 @@ async def _(event):
     animation_ttl = range(101)
     await event.edit("LOL HAHA ... !!!")
     animation_chars = [
-            "😂🤣😂🤣😂🤣😂🤣😂🤣",
-            "🤣😂🤣😂🤣😂🤣😂🤣😂",
-        ]
+        "😂🤣😂🤣😂🤣😂🤣😂🤣",
+        "🤣😂🤣😂🤣😂🤣😂🤣😂",
+    ]
 
     for i in animation_ttl:
 

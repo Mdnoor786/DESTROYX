@@ -1,14 +1,18 @@
-
 import os
-from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
-from telethon.errors.rpcerrorlist import (PhotoExtInvalidError,UsernameOccupiedError)
-from telethon.tl.functions.account import (UpdateProfileRequest,UpdateUsernameRequest)
-from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
-from telethon.tl.functions.photos import (DeletePhotosRequest,GetUserPhotosRequest,UploadProfilePhotoRequest)
-from telethon.tl.types import InputPhoto, MessageMediaPhoto, User, Chat, Channel
-from userbot import bot, CMD_HELP
-from userbot.events import javes05
 
+from telethon.errors import ImageProcessFailedError, PhotoCropSizeSmallError
+from telethon.errors.rpcerrorlist import PhotoExtInvalidError, UsernameOccupiedError
+from telethon.tl.functions.account import UpdateProfileRequest, UpdateUsernameRequest
+from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
+from telethon.tl.functions.photos import (
+    DeletePhotosRequest,
+    GetUserPhotosRequest,
+    UploadProfilePhotoRequest,
+)
+from telethon.tl.types import Channel, Chat, InputPhoto, MessageMediaPhoto, User
+
+from userbot import CMD_HELP, bot
+from userbot.events import javes05
 
 INVALID_MEDIA = "```The extension of the media entity is invalid.```"
 PP_CHANGED = "```Profile picture changed successfully.```"
@@ -20,9 +24,8 @@ USERNAME_SUCCESS = "```Your username was succesfully changed.```"
 USERNAME_TAKEN = "```This username is already taken.```"
 
 
-
 @javes05(outgoing=True, pattern="^!reserved$")
-async def mine(event):   
+async def mine(event):
     result = await bot(GetAdminedPublicChannelsRequest())
     output_str = "".join(
         f"{channel_obj.title}\n@{channel_obj.username}\n\n"
@@ -33,7 +36,7 @@ async def mine(event):
 
 
 @javes05(outgoing=True, pattern="^!name")
-async def update_name(name):    
+async def update_name(name):
     newname = name.text[6:]
     if " " not in newname:
         firstname = newname
@@ -42,32 +45,31 @@ async def update_name(name):
         namesplit = newname.split(" ", 1)
         firstname = namesplit[0]
         lastname = namesplit[1]
-    await name.client(
-        UpdateProfileRequest(first_name=firstname, last_name=lastname))
+    await name.client(UpdateProfileRequest(first_name=firstname, last_name=lastname))
     await name.edit(NAME_OK)
 
 
 @javes05(outgoing=True, pattern="^!setpfp$")
 async def set_profilepic(propic):
-    await propic.edit("`Processing...`") 
+    await propic.edit("`Processing...`")
     replymsg = await propic.get_reply_message()
     photo = None
-    #Prevent Channel Bug to control Change Profile
+    # Prevent Channel Bug to control Change Profile
     if propic.is_channel and not propic.is_group:
         await propic.edit("`Setpfp Commad isn't permitted on channels`")
         return
     if replymsg.media:
         if isinstance(replymsg.media, MessageMediaPhoto):
             photo = await propic.client.download_media(message=replymsg.photo)
-        elif "image" in replymsg.media.document.mime_type.split('/'):
+        elif "image" in replymsg.media.document.mime_type.split("/"):
             photo = await propic.client.download_file(replymsg.media.document)
         else:
             await propic.edit(INVALID_MEDIA)
     if photo:
         try:
             await propic.client(
-                UploadProfilePhotoRequest(await
-                                          propic.client.upload_file(photo)))
+                UploadProfilePhotoRequest(await propic.client.upload_file(photo))
+            )
             os.remove(photo)
             await propic.edit(PP_CHANGED)
         except PhotoCropSizeSmallError:
@@ -79,9 +81,9 @@ async def set_profilepic(propic):
 
 
 @javes05(outgoing=True, pattern="^!setbio (.*)")
-async def set_biograph(setbio):    
+async def set_biograph(setbio):
     await setbio.edit("`Processing...`")
-    newbio = setbio.pattern_match.group(1)  
+    newbio = setbio.pattern_match.group(1)
     if setbio.is_channel and not setbio.is_group:
         await setbio.edit("`setbio Commad isn't permitted on channels`")
         return
@@ -91,9 +93,9 @@ async def set_biograph(setbio):
 
 @javes05(outgoing=True, pattern="^!username (.*)")
 async def update_username(username):
-    """ For .username command, set a new username in Telegram. """
+    """For .username command, set a new username in Telegram."""
     await username.edit("`Processing...`")
-    newusername = username.pattern_match.group(1) 
+    newusername = username.pattern_match.group(1)
     if username.is_channel and not username.is_group:
         await username.edit("`username Commad isn't permitted on channels`")
         return
@@ -105,7 +107,7 @@ async def update_username(username):
 
 
 @javes05(outgoing=True, pattern="^!count$")
-async def count(event):    
+async def count(event):
     u = 0
     g = 0
     c = 0
@@ -140,13 +142,13 @@ async def count(event):
 
 @javes05(outgoing=True, pattern=r"^!delpfp")
 async def remove_profilepic(delpfp):
-    """ For .delpfp command, delete your current profile picture in Telegram. """
+    """For .delpfp command, delete your current profile picture in Telegram."""
     await delpfp.edit("`Processing...`")
     group = delpfp.text[8:]
     if delpfp.is_channel and not delpfp.is_group:
         await delpfp.edit("`delpfp Commad isn't permitted on channels`")
         return
-    if group == 'all':
+    if group == "all":
         lim = 0
     elif group.isdigit():
         lim = int(group)
@@ -154,10 +156,8 @@ async def remove_profilepic(delpfp):
         lim = 1
 
     pfplist = await delpfp.client(
-        GetUserPhotosRequest(user_id=delpfp.from_id,
-                             offset=0,
-                             max_id=0,
-                             limit=lim))
+        GetUserPhotosRequest(user_id=delpfp.from_id, offset=0, max_id=0, limit=lim)
+    )
     input_photos = [
         InputPhoto(
             id=sep.id,
@@ -168,13 +168,12 @@ async def remove_profilepic(delpfp):
     ]
 
     await delpfp.client(DeletePhotosRequest(id=input_photos))
-    await delpfp.edit(
-        f"`Successfully deleted {len(input_photos)} profile picture(s).`")
+    await delpfp.edit(f"`Successfully deleted {len(input_photos)} profile picture(s).`")
 
 
-CMD_HELP.update({
-    "me":
-    "`!username <new_username>`\
+CMD_HELP.update(
+    {
+        "me": "`!username <new_username>`\
 \n**Usage:** Changes your Telegram username.\
 \n\n`!name <firstname> or !name <firstname> <lastname>`\
 \n**Usage:** Changes your Telegram name.(First and last name will get split by the first space)\
@@ -188,4 +187,5 @@ CMD_HELP.update({
 \n**Usage:** Shows usernames reserved by you.\
 \n\n`!count`\
 \n**Usage:** Counts your groups, chats, bots etc..."
-})
+    }
+)

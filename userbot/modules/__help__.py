@@ -1,14 +1,16 @@
 import asyncio
 
 import requests
-from telethon import functions
-#from userbot.helpers import yaml_format
-from userbot.utils import admin_cmd
+
 from userbot import ALIVE_NAME, CMD_HELP, CMD_LIST
 from userbot import bot as borg
+
+# from userbot.helpers import yaml_format
+from userbot.utils import admin_cmd
+
 DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else "Noob"
 
-HELPTYPE=False
+HELPTYPE = False
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="help ?(.*)"))
@@ -17,9 +19,7 @@ async def cmd_list(event):
     reply_to_id = event.reply_to_msg_id or None
     input_str = event.pattern_match.group(1)
     if input_str == "text":
-        string = (
-            "Total {count} commands found in {plugincount} plugins of userbot\n\n"
-        )
+        string = "Total {count} commands found in {plugincount} plugins of userbot\n\n"
         catcount = 0
         plugincount = 0
         for i in sorted(CMD_LIST):
@@ -58,7 +58,7 @@ async def cmd_list(event):
                 string.format(count=catcount, input_str=input_str), parse_mode="HTML"
             )
         else:
-            await event.edit(f'{input_str} is not a valid plugin!')
+            await event.edit(f"{input_str} is not a valid plugin!")
             await asyncio.sleep(3)
             await event.delete()
     elif HELPTYPE is True:
@@ -83,11 +83,9 @@ async def cmd_list(event):
         await event.edit(string.format(count=catcount), parse_mode="HTML")
 
 
-
-
 @borg.on(admin_cmd(outgoing=True, pattern="chk ?(.*)"))
 async def info(event):
-    """ For .info command,"""
+    """For .info command,"""
     if args := event.pattern_match.group(1).lower():
         if args in CMD_HELP:
             await event.edit(str(CMD_HELP[args]))
@@ -108,7 +106,7 @@ async def info(event):
             await event.edit(string.format(count=catcount), parse_mode="HTML")
 
 
-'''@borg.on(admin_cmd(pattern="dc$"))
+"""@borg.on(admin_cmd(pattern="dc$"))
 async def _(event):
     result = await bot(functions.help.GetNearestDcRequest())
     result = (
@@ -122,5 +120,4 @@ async def _(event):
                 "
     )
     await event.edit(result)
-'''
-
+"""

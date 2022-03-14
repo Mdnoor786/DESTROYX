@@ -1,12 +1,12 @@
 # For @UniBorg
 # (c) Shrimadhav U K
-# PoRTeD FRoM ULTRA X 
+# PoRTeD FRoM ULTRA X
 
-from telethon import events, functions, types
-from userbot.utils import admin_cmd
-from userbot import CMD_HELP
 from telethon.tl.functions.channels import GetAdminedPublicChannelsRequest
-from userbot import bot
+
+from userbot import CMD_HELP, bot
+from userbot.utils import admin_cmd
+
 
 @bot.on(admin_cmd("listmyusernames"))
 async def mine(event):
@@ -19,5 +19,8 @@ async def mine(event):
     await event.edit(output_str)
 
 
-
-CMD_HELP.update({"LisT My Usernames": ".listmyusernames gives you a list of your channels and groups"})
+CMD_HELP.update(
+    {
+        "LisT My Usernames": ".listmyusernames gives you a list of your channels and groups"
+    }
+)
