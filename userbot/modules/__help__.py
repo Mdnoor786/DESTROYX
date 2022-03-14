@@ -14,9 +14,7 @@ HELPTYPE=False
 @borg.on(admin_cmd(outgoing=True, pattern="help ?(.*)"))
 async def cmd_list(event):
     global HELPTYPE
-    reply_to_id = None
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
+    reply_to_id = event.reply_to_msg_id or None
     input_str = event.pattern_match.group(1)
     if input_str == "text":
         string = (
@@ -26,9 +24,9 @@ async def cmd_list(event):
         plugincount = 0
         for i in sorted(CMD_LIST):
             plugincount += 1
-            string += f"{plugincount}) Commands found in Plugin " + i + " are \n"
+            string += f"{plugincount}) Commands found in Plugin {i}" + " are \n"
             for iter_list in CMD_LIST[i]:
-                string += "    " + str(iter_list)
+                string += f"    {str(iter_list)}"
                 string += "\n"
                 catcount += 1
             string += "\n"
@@ -60,40 +58,37 @@ async def cmd_list(event):
                 string.format(count=catcount, input_str=input_str), parse_mode="HTML"
             )
         else:
-            await event.edit(input_str + " is not a valid plugin!")
+            await event.edit(f'{input_str} is not a valid plugin!')
             await asyncio.sleep(3)
             await event.delete()
-    else:
-        if HELPTYPE is True:
-            help_string = f"Userbot Helper.. Provided by {DEFAULTUSER}\
+    elif HELPTYPE is True:
+        help_string = f"Userbot Helper.. Provided by {DEFAULTUSER}\
                           \nUserbot Helper to reveal all the plugin names"
-                          
-            tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
-            results = await bot.inline_query(  # pylint:disable=E0602
-                tgbotusername, help_string
-            )
-            await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
-            await event.delete()
-        else:
-            string = "<b>Please specify which plugin do you want help for !!\
+
+        tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+        results = await bot.inline_query(  # pylint:disable=E0602
+            tgbotusername, help_string
+        )
+        await results[0].click(event.chat_id, reply_to=reply_to_id, hide_via=True)
+        await event.delete()
+    else:
+        string = "<b>Please specify which plugin do you want help for !!\
                 \nNumber of plugins : </b><code>{count}</code>\
                 \n<b>Usage:</b> <code>.help</code> plugin name\n\n"
-            catcount = 0
-            for i in sorted(CMD_LIST):
-                string += "• " + f"<code>{str(i)}</code>"
-                string += "   "
-                catcount += 1
-            await event.edit(string.format(count=catcount), parse_mode="HTML")
+        catcount = 0
+        for i in sorted(CMD_LIST):
+            string += f"• <code>{str(i)}</code>"
+            string += "   "
+            catcount += 1
+        await event.edit(string.format(count=catcount), parse_mode="HTML")
 
 
 
 
 @borg.on(admin_cmd(outgoing=True, pattern="chk ?(.*)"))
-
 async def info(event):
     """ For .info command,"""
-    args = event.pattern_match.group(1).lower()
-    if args:
+    if args := event.pattern_match.group(1).lower():
         if args in CMD_HELP:
             await event.edit(str(CMD_HELP[args]))
         else:
@@ -106,10 +101,10 @@ async def info(event):
             \n<b>Usage : </b><code>.chk</code> <plugin name>\n\n"
         catcount = 0
         for i in sorted(CMD_HELP):
-            string += "• " + f"<code>{str(i)}</code>"
+            string += f"• <code>{str(i)}</code>"
             string += "   "
             catcount += 1
-       
+
             await event.edit(string.format(count=catcount), parse_mode="HTML")
 
 

@@ -10,7 +10,7 @@ async def _(event):
     if event.fwd_from:
         return
     animation_interval = 1
-    animation_ttl = range(0,101)
+    animation_ttl = range(101)
     await event.edit("LOL HAHA ... !!!")
     animation_chars = [
             "😂🤣😂🤣😂🤣😂🤣😂🤣",
@@ -18,6 +18,6 @@ async def _(event):
         ]
 
     for i in animation_ttl:
-        	
+
         await asyncio.sleep(animation_interval)
         await event.edit(animation_chars[i % 2])

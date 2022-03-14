@@ -35,7 +35,7 @@ async def install(event):
                 if shortname in CMD_LIST:
                     string = "**Commands found in** `{}`\n".format((os.path.basename(downloaded_file_name)))
                     for i in CMD_LIST[shortname]:
-                        string += "  •  `" + i 
+                        string += f"  •  `{i}"
                         string += "`\n"
                         if b == 1:
                             a = "__Installing..__"
@@ -48,7 +48,10 @@ async def install(event):
                 return await event.edit(f"Installed module `{os.path.basename(downloaded_file_name)}`")
             else:
                 os.remove(downloaded_file_name)
-                return await event.edit(f"**Failed to Install** \n`Error`\nModule already installed or unknown formet")
+                return await event.edit(
+                    "**Failed to Install** \\n`Error`\\nModule already installed or unknown formet"
+                )
+
         except Exception as e: 
             await event.edit(f"**Failed to Install** \n`Error`\n{str(e)}")
             return os.remove(downloaded_file_name)
@@ -76,7 +79,7 @@ async def send(event):
         return
     message_id = event.message.id
     input_str = event.pattern_match["shortname"]
-    the_plugin_file = "./userbot/modules/{}.py".format(input_str)
+    the_plugin_file = f"./userbot/modules/{input_str}.py"
     start = datetime.now()
     await event.client.send_file(  # pylint:disable=E0602
         event.chat_id,
@@ -87,7 +90,7 @@ async def send(event):
     )
     end = datetime.now()
     time_taken_in_ms = (end - start).seconds
-    await event.edit("Uploaded {} in {} seconds".format(input_str, time_taken_in_ms))
+    await event.edit(f"Uploaded {input_str} in {time_taken_in_ms} seconds")
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
 
@@ -110,20 +113,28 @@ async def unload(event):
 @javes05(outgoing=True, pattern="^!installall (.*)")
 async def install(event):
     try:
-      chat = event.pattern_match.group(1) ; text = f"**Installing plugins from {chat}..\n\n**" ; cui = await client.get_messages(chat, limit = 75, filter=InputMessagesFilterDocument)  ; total = int(cui.total) ; total_doxx = range(0, total)
+        chat = event.pattern_match.group(1)
+        text = f"**Installing plugins from {chat}..\n\n**"
+        cui = await client.get_messages(chat, limit = 75, filter=InputMessagesFilterDocument)
+        total = int(cui.total)
+        total_doxx = range(total)
     except:
     	return await event.edit("Error\nUsage: `!installall <channel/group username>`")
     for ixo in total_doxx:
-        await event.edit(text) ; mxo = cui[ixo].id ; downloaded_file_name = await event.client.download_media(await client.get_messages(chat, ids=mxo), "userbot/modules/")
+        await event.edit(text)
+        mxo = cui[ixo].id
+        downloaded_file_name = await event.client.download_media(await client.get_messages(chat, ids=mxo), "userbot/modules/")
         if "(" not in downloaded_file_name:
-            path1 = Path(downloaded_file_name) ; shortname = path1.stem
+            path1 = Path(downloaded_file_name)
+            shortname = path1.stem
             if (os.path.basename(downloaded_file_name)).endswith('.py'):
-               try:
-                 load_module(shortname.replace(".py", "")) ; text += f"**• Installed** {(os.path.basename(downloaded_file_name))}\n"
-               except:
-               	text += f"**× Failed to install** {(os.path.basename(downloaded_file_name))}\n" ; os.remove (downloaded_file_name) ; pass
+                try:
+                    load_module(shortname.replace(".py", "")) ; text += f"**• Installed** {(os.path.basename(downloaded_file_name))}\n"
+                except:
+                    text += f"**× Failed to install** {(os.path.basename(downloaded_file_name))}\n"
+                    os.remove (downloaded_file_name)
             else: 
-                  text += f"** Skiped** {(os.path.basename(downloaded_file_name))}\n" ; os.remove (downloaded_file_name)
+                text += f"** Skiped** {(os.path.basename(downloaded_file_name))}\n" ; os.remove (downloaded_file_name)
         else:
             text += f"** Skiped** {(os.path.basename(downloaded_file_name))}\n" ; os.remove (downloaded_file_name)
     return await event.edit(f"{text}\n\n**Install completed**")

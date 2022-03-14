@@ -46,7 +46,7 @@ def parse_aesthetics(m):
 
 
 def parse_subreddit(m):
-    text = '/' + m.group(3)
+    text = f'/{m.group(3)}'
     entity = MessageEntityTextUrl(
         offset=m.start(2),
         length=len(text),

@@ -28,7 +28,10 @@ async def install(event):
                 path1 = Path(downloaded_file_name)
                 shortname = path1.stem
                 load_module(shortname.replace(".py", ""))
-                await event.edit("Installed Plugin `{}` 𝙹𝙰𝚅𝙴𝚂 2.0".format(os.path.basename(downloaded_file_name)))
+                await event.edit(
+                    f"Installed Plugin `{os.path.basename(downloaded_file_name)}` 𝙹𝙰𝚅𝙴𝚂 2.0"
+                )
+
             else:
                 os.remove(downloaded_file_name)
                 await event.edit("Errors! This plugin is already installed/pre-installed.")
@@ -44,7 +47,7 @@ async def send(event):
         return
     message_id = event.message.id
     input_str = event.pattern_match["shortname"]
-    the_plugin_file = "./userbot/modules/{}.py".format(input_str)
+    the_plugin_file = f"./userbot/modules/{input_str}.py"
     start = datetime.now()
     await event.client.send_file(  # pylint:disable=E0602
         event.chat_id,
@@ -55,7 +58,7 @@ async def send(event):
     )
     end = datetime.now()
     time_taken_in_ms = (end - start).seconds
-    await event.edit("Uploaded {} in {} seconds".format(input_str, time_taken_in_ms))
+    await event.edit(f"Uploaded {input_str} in {time_taken_in_ms} seconds")
     await asyncio.sleep(DELETE_TIMEOUT)
     await event.delete()
 

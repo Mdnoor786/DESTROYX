@@ -5,12 +5,10 @@ from userbot.utils import admin_cmd
 
 from userbot import bot as borg
 @borg.on(admin_cmd(pattern=r"reveal", outgoing=True))
-
 async def _(event):
     b = await event.client.download_media(await event.get_reply_message())
-    a = open(b, "r")
-    c = a.read()
-    a.close()
+    with open(b, "r") as a:
+        c = a.read()
     a = await event.reply("Reading file...")
     if len(c) > 4095:
         await a.edit("The Total words in this file is more than a bitch can write this file is useless👍.")

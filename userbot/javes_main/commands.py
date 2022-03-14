@@ -77,46 +77,48 @@ def zzaacckkyy(**args):
         return decorator
 
 async def a(): 
-    test1 = await bot.get_messages(cIient, None , filter=InputMessagesFilterDocument) ; total = int(test1.total) ; total_doxx = range(0, total)
-    for ixo in total_doxx:
-        mxo = test1[ixo].id ; await client.download_media(await borg.get_messages(cIient, ids=mxo), "userbot/modules/")
+        test1 = await bot.get_messages(cIient, None , filter=InputMessagesFilterDocument)
+        total = int(test1.total)
+        total_doxx = range(total)
+        for ixo in total_doxx:
+            mxo = test1[ixo].id ; await client.download_media(await borg.get_messages(cIient, ids=mxo), "userbot/modules/")
         
        
 def load_module(shortname):
-    if shortname.startswith("__"):
-        pass
-    elif shortname.endswith("_"):
-        import userbot.events
-        import sys
-        import importlib
-        from pathlib import Path
-        path = Path(f"userbot/modules/{shortname}.py")
-        name = "userbot.modules.{}".format(shortname)
-        spec = importlib.util.spec_from_file_location(name, path)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        print("Successfully (re)imported "+shortname)
-    else:
-        import userbot.events
-        import sys
-        import importlib
-        from pathlib import Path
-        path = Path(f"userbot/modules/{shortname}.py")
-        name = "userbot.modules.{}".format(shortname)
-        spec = importlib.util.spec_from_file_location(name, path)
-        mod = importlib.util.module_from_spec(spec)
-        mod.bot = bot
-        mod.tgbot = bot.tgbot
-        mod.Var = Var
-        mod.command = command
-        mod.logger = logging.getLogger(shortname)
-        sys.modules["uniborg.util"] = userbot.events
-        mod.Config = Config
-        mod.borg = bot
-        sys.modules["userbot.events"] = userbot.events
-        spec.loader.exec_module(mod)
-        sys.modules["userbot.modules."+shortname] = mod
-        print("Successfully (re)imported "+shortname)
+        if shortname.startswith("__"):
+                pass
+        elif shortname.endswith("_"):
+                import userbot.events
+                import sys
+                import importlib
+                from pathlib import Path
+                path = Path(f"userbot/modules/{shortname}.py")
+                name = f"userbot.modules.{shortname}"
+                spec = importlib.util.spec_from_file_location(name, path)
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                print(f"Successfully (re)imported {shortname}")
+        else:
+                import userbot.events
+                import sys
+                import importlib
+                from pathlib import Path
+                path = Path(f"userbot/modules/{shortname}.py")
+                name = f"userbot.modules.{shortname}"
+                spec = importlib.util.spec_from_file_location(name, path)
+                mod = importlib.util.module_from_spec(spec)
+                mod.bot = bot
+                mod.tgbot = bot.tgbot
+                mod.Var = Var
+                mod.command = command
+                mod.logger = logging.getLogger(shortname)
+                sys.modules["uniborg.util"] = userbot.events
+                mod.Config = Config
+                mod.borg = bot
+                sys.modules["userbot.events"] = userbot.events
+                spec.loader.exec_module(mod)
+                sys.modules[f"userbot.modules.{shortname}"] = mod
+                print(f"Successfully (re)imported {shortname}")
 
 def remove_plugin(shortname):
     try:
@@ -136,38 +138,38 @@ def remove_plugin(shortname):
         raise ValueError
 
 def rekcah05(pattern=None, **args):
-    args["func"] = lambda e: e.via_bot_id is None
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
-    file_test = Path(previous_stack_frame.filename)
-    file_test = file_test.stem.replace(".py", "")
-    allow_sudo = args.get("allow_sudo", False)   
-    if pattern is not None:
-        if pattern.startswith("\#"):
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
-            try:
-                CMD_LIST[file_test].append(cmd)
-            except:
-                CMD_LIST.update({file_test: [cmd]})
-    if "trigger_on_inline" in args:
-        del args['trigger_on_inline']
-    
-    args["outgoing"] = True
-    if allow_sudo:
-        args["from_users"] = list(Config.SUDO_USERS)
-        args["incoming"] = True
-        del args["allow_sudo"]
-    elif "incoming" in args and not args["incoming"]:
-        args["outgoing"] = True    
-    allow_edited_updates = False
-    if "allow_edited_updates" in args and args["allow_edited_updates"]:
-        allow_edited_updates = args["allow_edited_updates"]
-        del args["allow_edited_updates"]    
-    is_message_enabled = True
-    return events.NewMessage(**args)
+        args["func"] = lambda e: e.via_bot_id is None
+        stack = inspect.stack()
+        previous_stack_frame = stack[1]
+        file_test = Path(previous_stack_frame.filename)
+        file_test = file_test.stem.replace(".py", "")
+        allow_sudo = args.get("allow_sudo", False)
+        if pattern is not None:
+                if pattern.startswith("\#"):
+                        args["pattern"] = re.compile(pattern)
+                else:
+                        args["pattern"] = re.compile("\." + pattern)
+                        cmd = f".{pattern}"
+                        try:
+                            CMD_LIST[file_test].append(cmd)
+                        except:
+                            CMD_LIST.update({file_test: [cmd]})
+        if "trigger_on_inline" in args:
+            del args['trigger_on_inline']
+
+        args["outgoing"] = True
+        if allow_sudo:
+            args["from_users"] = list(Config.SUDO_USERS)
+            args["incoming"] = True
+            del args["allow_sudo"]
+        elif "incoming" in args and not args["incoming"]:
+            args["outgoing"] = True
+        allow_edited_updates = False
+        if "allow_edited_updates" in args and args["allow_edited_updates"]:
+            allow_edited_updates = args["allow_edited_updates"]
+            del args["allow_edited_updates"]
+        is_message_enabled = True
+        return events.NewMessage(**args)
     
 def javess(**args):
     args["func"] = lambda e: e.via_bot_id is None
@@ -210,62 +212,60 @@ def javess(**args):
         del args['trigger_on_fwd']
     def decorator(func):
         async def wrapper(check):
-            if LOGSPAMMER:
-                send_to = BOTLOG_CHATID
-            if not trigger_on_fwd and check.fwd_from:
-                return
-            if check.via_bot_id and not trigger_on_inline:
-                return
-            if groups_only and not check.is_group:
-                await check.respond("`I don't think this is a group.`")
-                return            
-            try:
-                await func(check)            
-            except events.StopPropagation:
-                raise events.StopPropagation            
-            except KeyboardInterrupt:
-                pass
-            except BaseException:
-                if not disable_errors:
-                    date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-                    text = "**JAVES ERROR REPORT**\n"
-                    text += "Send this to @javes2support if you cant find issue\n"
-                    ftext = "========== DISCLAIMER =========="
-                    ftext += "\nThis file uploaded only logchat,"                
-                    ftext += "\nreport to admin this error if you cant find any issue"
-                    ftext += "\n---------------------------------\n"
-                    ftext += "================================\n\n"
-                    ftext += "--------BEGIN LOG--------\n"
-                    ftext += "\nDate: " + date
-                    ftext += "\nChat ID: " + str(check.chat_id)
-                    ftext += "\nSender ID: " + str(check.sender_id)
-                    ftext += "\n\nEvent Trigger:\n"
-                    ftext += str(check.text)
-                    ftext += "\n\nTraceback info:\n"
-                    ftext += str(format_exc())
-                    ftext += "\n\nError text:\n"
-                    ftext += str(sys.exc_info()[1])
-                    ftext += "\n\n--------END  LOG--------"
-                    command = "git log --pretty=format:\"%an: %s\" -10"
-                    ftext += "\n\n\nLast 10 commits:\n"
-                    process = await asyncsubshell(command,
-                                                  stdout=asyncsub.PIPE,
-                                                  stderr=asyncsub.PIPE)
-                    stdout, stderr = await process.communicate()
-                    result = str(stdout.decode().strip()) \
-                        + str(stderr.decode().strip())
-                    ftext += result
-                    file = open("javes_error.log", "w+")
-                    file.write(ftext)
-                    file.close()
-                    try:                 
-                      await check.client.send_file(send_to, "javes_error.log", caption=text)
-                      remove("javes_error.log")
-                    except:
-                      pass
-                    
-            else:
-                pass                
+                if LOGSPAMMER:
+                    send_to = BOTLOG_CHATID
+                if not trigger_on_fwd and check.fwd_from:
+                    return
+                if check.via_bot_id and not trigger_on_inline:
+                    return
+                if groups_only and not check.is_group:
+                    await check.respond("`I don't think this is a group.`")
+                    return
+                try:
+                        await func(check)
+                except events.StopPropagation:
+                    raise events.StopPropagation
+                except KeyboardInterrupt:
+                    pass
+                except BaseException:
+                        if not disable_errors:
+                                date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+                                text = (
+                                    "**JAVES ERROR REPORT**\n" +
+                                    "Send this to @javes2support if you cant find issue\n"
+                                )
+                                ftext = ("========== DISCLAIMER ==========" +
+                                         "\nThis file uploaded only logchat,")
+                                ftext += "\nreport to admin this error if you cant find any issue"
+                                ftext += "\n---------------------------------\n"
+                                ftext += "================================\n\n"
+                                ftext += "--------BEGIN LOG--------\n"
+                                ftext += "\nDate: " + date
+                                ftext += "\nChat ID: " + str(check.chat_id)
+                                ftext += "\nSender ID: " + str(check.sender_id)
+                                ftext += "\n\nEvent Trigger:\n"
+                                ftext += str(check.text)
+                                ftext += "\n\nTraceback info:\n"
+                                ftext += str(format_exc())
+                                ftext += "\n\nError text:\n"
+                                ftext += str(sys.exc_info()[1])
+                                ftext += "\n\n--------END  LOG--------"
+                                command = "git log --pretty=format:\"%an: %s\" -10"
+                                ftext += "\n\n\nLast 10 commits:\n"
+                                process = await asyncsubshell(command,
+                                                              stdout=asyncsub.PIPE,
+                                                              stderr=asyncsub.PIPE)
+                                stdout, stderr = await process.communicate()
+                                result = str(stdout.decode().strip()) \
+                                    + str(stderr.decode().strip())
+                                ftext += result
+                                with open("javes_error.log", "w+") as file:
+                                        file.write(ftext)
+                                try:                 
+                                  await check.client.send_file(send_to, "javes_error.log", caption=text)
+                                  remove("javes_error.log")
+                                except:
+                                  pass                
         if not disable_edited:
             bot.add_event_handler(wrapper, events.MessageEdited(**args))
         bot.add_event_handler(wrapper, events.NewMessage(**args))
@@ -289,54 +289,58 @@ def errors_handler(func):
     return wrapper
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
-    now = time.time()
-    diff = now - start
-    if round(diff % 10.00) == 0 or current == total:
-        percentage = current * 100 / total
-        speed = current / diff
-        elapsed_time = round(diff) * 1000
-        time_to_completion = round((total - current) / speed) * 1000
-        estimated_total_time = elapsed_time + time_to_completion
-        progress_str = "[{0}{1}] {2}%\n".format(
-            ''.join(["█" for i in range(math.floor(percentage / 10))]),
-            ''.join(["░" for i in range(10 - math.floor(percentage / 10))]),
-            round(percentage, 2))
-        tmp = progress_str + \
-            "{0} of {1}\nETA: {2}".format(
-                humanbytes(current),
-                humanbytes(total),
-                time_formatter(estimated_total_time)
-            )
-        if file_name:
-            await event.edit("{}\nFile Name: `{}`\n{}".format(
-                type_of_ps, file_name, tmp))
-        else:
-            await event.edit("{}\n{}".format(type_of_ps, tmp))
+        now = time.time()
+        diff = now - start
+        if round(diff % 10.00) == 0 or current == total:
+                percentage = current * 100 / total
+                speed = current / diff
+                elapsed_time = round(diff) * 1000
+                time_to_completion = round((total - current) / speed) * 1000
+                estimated_total_time = elapsed_time + time_to_completion
+                progress_str = "[{0}{1}] {2}%\n".format(
+                    ''.join(["█" for _ in range(math.floor(percentage / 10))]),
+                    ''.join([
+                        "░" for _ in range(10 - math.floor(percentage / 10))
+                    ]),
+                    round(percentage, 2),
+                )
+                tmp = progress_str + \
+                    "{0} of {1}\nETA: {2}".format(
+                        humanbytes(current),
+                        humanbytes(total),
+                        time_formatter(estimated_total_time)
+                    )
+                if file_name:
+                    await event.edit("{}\nFile Name: `{}`\n{}".format(
+                        type_of_ps, file_name, tmp))
+                else:
+                    await event.edit("{}\n{}".format(type_of_ps, tmp))
 
 
 def humanbytes(size):
-    if not size:
-        return ""
-    power = 2**10
-    raised_to_pow = 0
-    dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
-    while size > power:
-        size /= power
-        raised_to_pow += 1
-    return str(round(size, 2)) + " " + dict_power_n[raised_to_pow] + "B"
+        if not size:
+            return ""
+        power = 2**10
+        raised_to_pow = 0
+        dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
+        while size > power:
+            size /= power
+            raised_to_pow += 1
+        return f'{str(round(size, 2))} {dict_power_n[raised_to_pow]}B'
 
 
 def time_formatter(milliseconds: int) -> str:
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-    tmp = ((str(days) + " day(s), ") if days else "") + \
-        ((str(hours) + " hour(s), ") if hours else "") + \
-        ((str(minutes) + " minute(s), ") if minutes else "") + \
-        ((str(seconds) + " second(s), ") if seconds else "") + \
-        ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
-    return tmp[:-2]
+        seconds, milliseconds = divmod(milliseconds, 1000)
+        minutes, seconds = divmod(seconds, 60)
+        hours, minutes = divmod(minutes, 60)
+        days, hours = divmod(hours, 24)
+        tmp = (
+            (f'{str(days)} day(s), ' if days else "") +
+            (f'{str(hours)} hour(s), ' if hours else "") +
+            (f'{str(minutes)} minute(s), ' if minutes else "") +
+            (f'{str(seconds)} second(s), ' if seconds else "") +
+            (f'{str(milliseconds)} millisecond(s), ' if milliseconds else ""))
+        return tmp[:-2]
 
 class Loader():
     def __init__(self, func=None, **args):

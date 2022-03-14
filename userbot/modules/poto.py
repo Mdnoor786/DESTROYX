@@ -17,7 +17,6 @@ if 1 == 1:
     client = javes
 
     @javes.on(friday_on_cmd(pattern="poto(.*)"))
-
     async def potocmd(event):
 
         """Gets the profile photos of replied users, channels or chats"""
@@ -65,7 +64,7 @@ if 1 == 1:
 
                 return
 
-            if int(id) <= (len(photos)):
+            if id <= (len(photos)):
 
                 send_photos = await event.client.download_media(photos[id - 1])
 
