@@ -86,7 +86,6 @@ async def gspide(rk):
     if rk.is_private:
         user = rk.chat
         reason = rk.pattern_match.group(1)
-        chat_title = "PM"
     else:
         rk.chat.title
     try:

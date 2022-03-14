@@ -215,13 +215,12 @@ async def gspider(rk):
     me = await rk.client.get_me()
     await rkp.edit(f"`Gmuting....`")
     my_mention = "[{}](tg://user?id={})".format(me.first_name, me.id)
-    my_username = f"@{me.username}" if me.username else my_mention
-    chat = await rk.get_chat()
+    f"@{me.username}" if me.username else my_mention
+    await rk.get_chat()
     a = b = 0
     if rk.is_private:
         user = rk.chat
         reason = rk.pattern_match.group(1)
-        chat_title = "PM"
     else:
         rk.chat.title
     try:
@@ -279,7 +278,6 @@ async def gspider(rk):
     if rk.is_private:
         user = rk.chat
         reason = rk.pattern_match.group(1)
-        chat_title = "PM"
     else:
         rk.chat.title
     try:
@@ -324,7 +322,6 @@ async def gspider(rk):
     if rk.is_private:
         user = rk.chat
         reason = rk.pattern_match.group(1)
-        chat_title = "PM"
     else:
         rk.chat.title
     try:
@@ -396,7 +393,6 @@ async def gspider(rk):
     if rk.is_private:
         user = rk.chat
         reason = rk.pattern_match.group(1)
-        chat_title = "PM"
     else:
         rk.chat.title
     try:
